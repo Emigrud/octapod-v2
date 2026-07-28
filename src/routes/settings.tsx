@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Settings2, Building2, Layers, Globe2 } from "lucide-react";
 import { EmptyState } from "@/components/octapod";
-import { PageHeader } from "./index";
+import { PageHeader } from "@/components/shell/PageHeader";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({

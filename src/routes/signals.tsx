@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Radio } from "lucide-react";
 import { EmptyState, StatCard } from "@/components/octapod";
-import { PageHeader } from "./index";
+import { PageHeader } from "@/components/shell/PageHeader";
 
 export const Route = createFileRoute("/signals")({
   head: () => ({

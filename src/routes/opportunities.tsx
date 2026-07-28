@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { FileText } from "lucide-react";
 import { DataTable, FilterBar, type DataTableColumn } from "@/components/octapod";
-import { PageHeader } from "./index";
+import { PageHeader } from "@/components/shell/PageHeader";
 
 export const Route = createFileRoute("/opportunities")({
   head: () => ({

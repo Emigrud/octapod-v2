@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Map as MapIcon } from "lucide-react";
 import { CountryChip, Tag } from "@/components/octapod";
-import { PageHeader } from "./index";
+import { PageHeader } from "@/components/shell/PageHeader";
 
 export const Route = createFileRoute("/map")({
   head: () => ({
