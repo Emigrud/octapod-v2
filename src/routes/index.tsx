@@ -88,11 +88,11 @@ function DashboardPage() {
         <BriefingCard />
       </section>
 
-      <section className="grid gap-4 xl:grid-cols-2">
-        <div className="min-h-[560px]">
+      <section className="grid grid-cols-2 gap-4">
+        <div className="min-w-0 min-h-[560px]">
           <MapPlaceholder />
         </div>
-        <div className="min-h-[560px]">
+        <div className="min-w-0 min-h-[560px]">
           <SignalsFeed />
         </div>
       </section>
