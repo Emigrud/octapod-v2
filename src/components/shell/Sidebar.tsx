@@ -15,7 +15,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import logoAsset from "@/assets/oktapod-logo.png.asset.json";
+import logoAsset from "@/assets/oktapod-logo-transparent.png.asset.json";
 
 interface NavItem {
   to: string;
