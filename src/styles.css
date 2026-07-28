@@ -5,22 +5,23 @@
 @custom-variant dark (&:is(.dark, .dark *));
 
 /* ============================================================
- * OCTAPOD — Design tokens (Baltic chart room)
+ * OKTAPOD — Design tokens (bright control-room)
  * ------------------------------------------------------------
- * Semantic contract:
- *   --accent-tender (ice-cyan)  encodes TENDERS only
- *   --accent-signal (amber)     encodes EARLY SIGNALS only
- * Colour is information, never decoration. Never use these two
- * accents for anything else, and never introduce a third.
+ * Single primary accent = cornflower blue. Used consistently
+ * for actions, highlights, active nav, links, charts and the
+ * AI briefing frame. A muted amber is reserved only for "New"
+ * pills and impact tags. Icon-tile fills use a small semantic
+ * palette (blue/teal/orange/green/violet) — decorative, never
+ * for text or borders.
  *
  * Themes:
- *   .dark  — default. Deep blue-slate chart room.
- *   .light — "chart paper" mode. Warm off-white, ink-navy.
+ *   :root / .light — DEFAULT. Near-white, blue accent.
+ *   .dark          — optional chart-room dark mode.
  *
  * Typography:
- *   --font-display  Space Grotesk (restrained display headings)
- *   --font-sans     Inter (UI and body)
- *   --font-mono     IBM Plex Mono (numbers, IDs, coordinates, money)
+ *   --font-display  Space Grotesk
+ *   --font-sans     Inter
+ *   --font-mono     IBM Plex Mono
  * ============================================================ */
 
 @theme inline {
@@ -28,10 +29,10 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  --radius-sm: 3px;
-  --radius-md: 5px;
-  --radius-lg: 7px;
-  --radius-xl: 10px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -48,47 +49,129 @@
 
   --color-card: var(--surface-1);
   --color-card-foreground: var(--foreground);
-  --color-popover: var(--surface-2);
+  --color-popover: var(--surface-1);
   --color-popover-foreground: var(--foreground);
 
-  --color-primary: var(--foreground);
-  --color-primary-foreground: var(--background);
+  --color-primary: var(--accent-primary);
+  --color-primary-foreground: var(--accent-primary-foreground);
+  --color-primary-muted: var(--accent-primary-muted);
   --color-secondary: var(--surface-2);
   --color-secondary-foreground: var(--foreground);
   --color-accent: var(--surface-2);
   --color-accent-foreground: var(--foreground);
 
-  --color-tender: var(--accent-tender);
-  --color-tender-foreground: var(--accent-tender-foreground);
-  --color-tender-muted: var(--accent-tender-muted);
+  /* Legacy tokens — mapped to primary blue so any lingering
+   * bg-tender/text-tender continues to render on-brand.
+   * Signal (amber) reserved for "New" / impact pills only. */
+  --color-tender: var(--accent-primary);
+  --color-tender-foreground: var(--accent-primary-foreground);
+  --color-tender-muted: var(--accent-primary-muted);
   --color-signal: var(--accent-signal);
   --color-signal-foreground: var(--accent-signal-foreground);
   --color-signal-muted: var(--accent-signal-muted);
+
+  /* Category tile fills — decorative only. */
+  --color-tile-blue: var(--tile-blue);
+  --color-tile-teal: var(--tile-teal);
+  --color-tile-orange: var(--tile-orange);
+  --color-tile-green: var(--tile-green);
+  --color-tile-violet: var(--tile-violet);
+  --color-tile-blue-fg: var(--tile-blue-fg);
+  --color-tile-teal-fg: var(--tile-teal-fg);
+  --color-tile-orange-fg: var(--tile-orange-fg);
+  --color-tile-green-fg: var(--tile-green-fg);
+  --color-tile-violet-fg: var(--tile-violet-fg);
 
   --color-success: var(--status-success);
   --color-warning: var(--status-warning);
   --color-danger: var(--status-danger);
   --color-destructive: var(--status-danger);
-  --color-destructive-foreground: oklch(0.98 0.005 240);
+  --color-destructive-foreground: oklch(1 0 0);
 
   --color-sidebar: var(--surface-1);
   --color-sidebar-foreground: var(--foreground);
   --color-sidebar-border: var(--hairline);
-  --color-sidebar-accent: var(--surface-2);
-  --color-sidebar-accent-foreground: var(--foreground);
-  --color-sidebar-primary: var(--foreground);
-  --color-sidebar-primary-foreground: var(--background);
+  --color-sidebar-accent: var(--accent-primary-muted);
+  --color-sidebar-accent-foreground: var(--accent-primary);
+  --color-sidebar-primary: var(--accent-primary);
+  --color-sidebar-primary-foreground: var(--accent-primary-foreground);
   --color-sidebar-ring: var(--ring);
 
-  --color-chart-1: var(--accent-tender);
-  --color-chart-2: var(--accent-signal);
-  --color-chart-3: oklch(0.65 0.09 220);
-  --color-chart-4: oklch(0.55 0.06 240);
-  --color-chart-5: oklch(0.75 0.12 60);
+  --color-chart-1: var(--accent-primary);
+  --color-chart-2: var(--tile-teal-fg);
+  --color-chart-3: var(--tile-orange-fg);
+  --color-chart-4: var(--tile-green-fg);
+  --color-chart-5: var(--tile-violet-fg);
 }
 
-/* ---------- Dark (default) — Baltic chart room ---------- */
+/* ---------- Light (default) — bright control room ---------- */
 :root,
+.light {
+  --background: oklch(0.985 0.003 240);
+  --foreground: oklch(0.20 0.02 250);
+
+  --surface-1: oklch(1 0 0);
+  --surface-2: oklch(0.968 0.006 240);
+  --surface-3: oklch(0.945 0.008 240);
+
+  --muted: oklch(0.968 0.006 240);
+  --muted-foreground: oklch(0.48 0.02 250);
+  --subtle-foreground: oklch(0.62 0.02 250);
+
+  --border: oklch(0.90 0.010 240);
+  --hairline: oklch(0.90 0.010 240 / 90%);
+  --input: oklch(0.92 0.010 240);
+  --ring: oklch(0.58 0.19 258);
+
+  /* Cornflower blue — the single actionable accent. */
+  --accent-primary: oklch(0.55 0.20 258);
+  --accent-primary-foreground: oklch(1 0 0);
+  --accent-primary-muted: oklch(0.55 0.20 258 / 10%);
+  --accent-primary-ring: oklch(0.55 0.20 258 / 30%);
+
+  /* Amber — reserved for "New" / impact pills only. */
+  --accent-signal: oklch(0.68 0.15 65);
+  --accent-signal-foreground: oklch(0.30 0.09 55);
+  --accent-signal-muted: oklch(0.68 0.15 65 / 14%);
+
+  /* Decorative category tiles (icon squares only). */
+  --tile-blue: oklch(0.94 0.04 258);
+  --tile-blue-fg: oklch(0.52 0.20 258);
+  --tile-teal: oklch(0.94 0.05 200);
+  --tile-teal-fg: oklch(0.55 0.13 210);
+  --tile-orange: oklch(0.95 0.05 55);
+  --tile-orange-fg: oklch(0.62 0.16 55);
+  --tile-green: oklch(0.94 0.06 155);
+  --tile-green-fg: oklch(0.55 0.13 155);
+  --tile-violet: oklch(0.94 0.05 295);
+  --tile-violet-fg: oklch(0.55 0.18 295);
+
+  --status-success: oklch(0.60 0.14 155);
+  --status-warning: oklch(0.68 0.15 65);
+  --status-danger: oklch(0.60 0.20 25);
+
+  --shadow-chart:
+    0 1px 0 0 oklch(0 0 0 / 3%) inset,
+    0 8px 24px -18px oklch(0.25 0.05 250 / 22%);
+
+  --isoline-bg:
+    radial-gradient(ellipse 1200px 700px at 20% 15%, oklch(0.55 0.20 258 / 4%), transparent 60%),
+    radial-gradient(ellipse 900px 500px at 85% 80%, oklch(0.55 0.20 258 / 3%), transparent 60%),
+    repeating-radial-gradient(
+      circle at 30% 40%,
+      transparent 0px,
+      transparent 46px,
+      oklch(0.55 0.20 258 / 4%) 46px,
+      oklch(0.55 0.20 258 / 4%) 47px
+    );
+
+  --grid-bg:
+    linear-gradient(oklch(0.55 0.20 258 / 5%) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0.55 0.20 258 / 5%) 1px, transparent 1px);
+  --grid-bg-size: 44px 44px;
+}
+
+/* ---------- Dark (optional) — chart room ---------- */
 .dark {
   --background: oklch(0.16 0.02 245);
   --foreground: oklch(0.94 0.008 230);
@@ -102,103 +185,50 @@
   --subtle-foreground: oklch(0.58 0.018 235);
 
   --border: oklch(0.30 0.02 245);
-  --hairline: oklch(0.30 0.02 245 / 55%);
+  --hairline: oklch(0.30 0.02 245 / 65%);
   --input: oklch(0.28 0.022 245);
-  --ring: oklch(0.72 0.11 210);
+  --ring: oklch(0.65 0.18 258);
 
-  /* Ice-cyan — tenders. Cool, instrument-like, never neon. */
-  --accent-tender: oklch(0.80 0.11 210);
-  --accent-tender-foreground: oklch(0.16 0.02 245);
-  --accent-tender-muted: oklch(0.80 0.11 210 / 14%);
+  --accent-primary: oklch(0.72 0.17 258);
+  --accent-primary-foreground: oklch(0.14 0.02 245);
+  --accent-primary-muted: oklch(0.72 0.17 258 / 16%);
+  --accent-primary-ring: oklch(0.72 0.17 258 / 40%);
 
-  /* Amber — early signals. Warm, oxidized brass, not gold, not orange. */
   --accent-signal: oklch(0.78 0.13 78);
   --accent-signal-foreground: oklch(0.16 0.02 245);
   --accent-signal-muted: oklch(0.78 0.13 78 / 14%);
+
+  --tile-blue: oklch(0.30 0.06 258);
+  --tile-blue-fg: oklch(0.80 0.15 258);
+  --tile-teal: oklch(0.30 0.05 210);
+  --tile-teal-fg: oklch(0.78 0.12 210);
+  --tile-orange: oklch(0.30 0.05 55);
+  --tile-orange-fg: oklch(0.80 0.13 65);
+  --tile-green: oklch(0.30 0.06 155);
+  --tile-green-fg: oklch(0.78 0.12 155);
+  --tile-violet: oklch(0.30 0.05 295);
+  --tile-violet-fg: oklch(0.80 0.13 295);
 
   --status-success: oklch(0.72 0.13 160);
   --status-warning: oklch(0.78 0.13 78);
   --status-danger: oklch(0.66 0.19 25);
 
-  --shadow-chart:
-    0 1px 0 0 oklch(1 0 0 / 3%) inset,
-    0 20px 40px -24px oklch(0 0 0 / 55%);
+  --shadow-chart: 0 1px 0 0 oklch(1 0 0 / 3%) inset, 0 20px 40px -24px oklch(0 0 0 / 55%);
 
   --isoline-bg:
-    radial-gradient(
-      ellipse 1200px 700px at 20% 15%,
-      oklch(0.72 0.11 210 / 4%),
-      transparent 60%
-    ),
-    radial-gradient(
-      ellipse 900px 500px at 85% 80%,
-      oklch(0.78 0.13 78 / 3%),
-      transparent 60%
-    ),
+    radial-gradient(ellipse 1200px 700px at 20% 15%, oklch(0.72 0.17 258 / 5%), transparent 60%),
     repeating-radial-gradient(
       circle at 30% 40%,
       transparent 0px,
-      transparent 42px,
-      oklch(0.72 0.11 210 / 3%) 42px,
-      oklch(0.72 0.11 210 / 3%) 43px
+      transparent 44px,
+      oklch(0.72 0.17 258 / 4%) 44px,
+      oklch(0.72 0.17 258 / 4%) 45px
     );
 
   --grid-bg:
     linear-gradient(oklch(1 0 0 / 2.5%) 1px, transparent 1px),
     linear-gradient(90deg, oklch(1 0 0 / 2.5%) 1px, transparent 1px);
   --grid-bg-size: 48px 48px;
-}
-
-/* ---------- Light — "chart paper" ---------- */
-.light {
-  --background: oklch(0.975 0.008 85);
-  --foreground: oklch(0.22 0.03 245);
-
-  --surface-1: oklch(0.985 0.006 85);
-  --surface-2: oklch(0.955 0.010 85);
-  --surface-3: oklch(0.930 0.012 85);
-
-  --muted: oklch(0.955 0.010 85);
-  --muted-foreground: oklch(0.42 0.025 245);
-  --subtle-foreground: oklch(0.55 0.020 245);
-
-  --border: oklch(0.85 0.015 240);
-  --hairline: oklch(0.60 0.03 240 / 22%);
-  --input: oklch(0.90 0.012 240);
-  --ring: oklch(0.55 0.10 220);
-
-  --accent-tender: oklch(0.52 0.11 220);
-  --accent-tender-foreground: oklch(0.985 0.006 85);
-  --accent-tender-muted: oklch(0.52 0.11 220 / 12%);
-
-  --accent-signal: oklch(0.60 0.13 62);
-  --accent-signal-foreground: oklch(0.985 0.006 85);
-  --accent-signal-muted: oklch(0.60 0.13 62 / 14%);
-
-  --status-success: oklch(0.52 0.13 160);
-  --status-warning: oklch(0.60 0.13 62);
-  --status-danger: oklch(0.55 0.19 25);
-
-  --shadow-chart: 0 1px 0 0 oklch(0 0 0 / 3%) inset, 0 12px 30px -20px oklch(0 0 0 / 15%);
-
-  --isoline-bg:
-    radial-gradient(
-      ellipse 1200px 700px at 20% 15%,
-      oklch(0.52 0.11 220 / 5%),
-      transparent 60%
-    ),
-    repeating-radial-gradient(
-      circle at 30% 40%,
-      transparent 0px,
-      transparent 44px,
-      oklch(0.52 0.11 220 / 5%) 44px,
-      oklch(0.52 0.11 220 / 5%) 45px
-    );
-
-  --grid-bg:
-    linear-gradient(oklch(0.52 0.11 220 / 6%) 1px, transparent 1px),
-    linear-gradient(90deg, oklch(0.52 0.11 220 / 6%) 1px, transparent 1px);
-  --grid-bg-size: 40px 40px;
 }
 
 @layer base {
@@ -246,7 +276,7 @@
   font-family: var(--font-sans);
   font-size: 10.5px;
   font-weight: 500;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--subtle-foreground);
 }

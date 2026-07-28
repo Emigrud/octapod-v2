@@ -1,104 +1,152 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, FileText, Radio, Map, Settings2, type LucideIcon } from "lucide-react";
+import {
+  LayoutDashboard,
+  Radio,
+  FileText,
+  FolderKanban,
+  Map,
+  CalendarDays,
+  Users,
+  BarChart3,
+  User,
+  Building2,
+  BellRing,
+  Sparkles,
+  type LucideIcon,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
+import logoAsset from "@/assets/oktapod-logo.png.asset.json";
 
 interface NavItem {
   to: string;
   label: string;
   icon: LucideIcon;
-  code: string;
+  badge?: string | number;
 }
 
-const NAV: NavItem[] = [
-  { to: "/", label: "Dashboard", icon: LayoutDashboard, code: "01" },
-  { to: "/opportunities", label: "Opportunities", icon: FileText, code: "02" },
-  { to: "/signals", label: "Signals", icon: Radio, code: "03" },
-  { to: "/map", label: "Map", icon: Map, code: "04" },
-  { to: "/settings", label: "Settings", icon: Settings2, code: "05" },
+const PRIMARY_NAV: NavItem[] = [
+  { to: "/", label: "Overview", icon: LayoutDashboard },
+  { to: "/signals", label: "Early Signals", icon: Radio, badge: 24 },
+  { to: "/opportunities", label: "Tenders", icon: FileText, badge: 128 },
+  { to: "/projects", label: "Projects", icon: FolderKanban },
+  { to: "/map", label: "Map", icon: Map },
+  { to: "/calendar", label: "Calendar", icon: CalendarDays },
+  { to: "/competitors", label: "Competitors", icon: Users },
+  { to: "/reports", label: "Reports", icon: BarChart3 },
+];
+
+const SETTINGS_NAV: NavItem[] = [
+  { to: "/settings", label: "My Profile", icon: User },
+  { to: "/settings/company", label: "Company Profile", icon: Building2 },
+  { to: "/settings/alerts", label: "Alerts & Subscriptions", icon: BellRing },
+];
+
+const COVERAGE = [
+  { code: "FI", flag: "🇫🇮" },
+  { code: "SE", flag: "🇸🇪" },
+  { code: "NO", flag: "🇳🇴" },
+  { code: "DK", flag: "🇩🇰" },
+  { code: "EE", flag: "🇪🇪" },
+  { code: "LV", flag: "🇱🇻" },
+  { code: "LT", flag: "🇱🇹" },
+  { code: "PL", flag: "🇵🇱" },
 ];
 
 export function Sidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
-    <aside className="hidden md:flex md:w-[232px] shrink-0 flex-col hairline-r bg-surface-1/40">
-      <div className="flex h-14 items-center gap-2.5 px-5 hairline-b">
-        <Logomark />
-        <div className="flex flex-col leading-none">
-          <span className="font-display text-[15px] font-semibold tracking-[0.02em] text-foreground">
-            OCTAPOD
-          </span>
-          <span className="mt-0.5 font-mono text-[9.5px] uppercase tracking-[0.22em] text-subtle-foreground">
-            Market intel · FI
-          </span>
-        </div>
+    <aside className="hidden md:flex md:w-[228px] shrink-0 flex-col hairline-r bg-surface-2/60">
+      <div className="flex h-16 items-center gap-2 px-5">
+        <img src={logoAsset.url} alt="oktapod" className="h-8 w-8 object-contain" />
+        <span className="font-display text-[20px] font-semibold text-primary lowercase tracking-tight">
+          oktapod
+        </span>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-3 py-4">
-        <div className="text-eyebrow px-2 pb-2">Workspace</div>
+      <nav className="flex-1 overflow-y-auto px-3 pb-4">
         <ul className="space-y-0.5">
-          {NAV.map((item) => {
-            const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
-            const Icon = item.icon;
-            return (
-              <li key={item.to}>
-                <Link
-                  to={item.to}
-                  className={cn(
-                    "group flex items-center gap-3 rounded-sm px-2.5 py-2 text-[13px] transition-colors",
-                    active
-                      ? "bg-surface-2 text-foreground"
-                      : "text-muted-foreground hover:bg-surface-2/60 hover:text-foreground",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "font-mono text-[10px] tabular tracking-[0.14em]",
-                      active ? "text-tender" : "text-subtle-foreground",
-                    )}
-                  >
-                    {item.code}
-                  </span>
-                  <Icon className="h-4 w-4 shrink-0" strokeWidth={1.6} />
-                  <span className="flex-1 truncate">{item.label}</span>
-                  {active && (
-                    <span className="h-1 w-1 rounded-full bg-tender shadow-[0_0_10px_var(--accent-tender)]" />
-                  )}
-                </Link>
-              </li>
-            );
-          })}
+          {PRIMARY_NAV.map((item) => (
+            <NavRow key={item.to} item={item} pathname={pathname} />
+          ))}
+        </ul>
+
+        <div className="mt-6 px-2 pb-2 text-eyebrow">My settings</div>
+        <ul className="space-y-0.5">
+          {SETTINGS_NAV.map((item) => (
+            <NavRow key={item.to} item={item} pathname={pathname} />
+          ))}
         </ul>
       </nav>
 
-      <div className="mx-3 mb-3 rounded-sm border border-hairline bg-surface-2/40 p-3">
-        <div className="text-eyebrow">Pilot status</div>
-        <div className="mt-1.5 flex items-baseline gap-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-signal" />
-          <span className="text-[12px] text-foreground">Phase 0 · Foundation</span>
-        </div>
-        <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-subtle-foreground">
-          FI · pilot market
+      <div className="mx-3 mb-2 rounded-md border border-hairline bg-surface-1 p-3">
+        <div className="text-eyebrow">Data coverage</div>
+        <div className="mt-1 text-[11.5px] text-muted-foreground">8 Countries</div>
+        <div className="mt-2 flex flex-wrap gap-1">
+          {COVERAGE.map((c) => (
+            <span
+              key={c.code}
+              title={c.code}
+              className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-hairline bg-surface-2 text-[11px] leading-none"
+            >
+              {c.flag}
+            </span>
+          ))}
         </div>
       </div>
+
+      <div className="mx-3 mb-2 rounded-md border border-hairline bg-surface-1 p-3">
+        <div className="text-eyebrow">System status</div>
+        <div className="mt-1 flex items-center gap-1.5">
+          <span className="h-1.5 w-1.5 rounded-full bg-success" />
+          <span className="text-[11.5px] text-foreground">All systems operational</span>
+        </div>
+        <div className="mt-1 font-mono text-[10px] text-subtle-foreground">
+          Last update · 2 min ago
+        </div>
+      </div>
+
+      <button
+        type="button"
+        className="mx-3 mb-4 inline-flex items-center justify-between gap-2 rounded-md border border-hairline bg-surface-1 px-3 py-2 text-[12px] text-foreground hover:border-primary/40 hover:bg-primary-muted"
+      >
+        <span className="inline-flex items-center gap-2">
+          <Sparkles className="h-3.5 w-3.5 text-primary" />
+          What's new
+        </span>
+        <span className="text-subtle-foreground">›</span>
+      </button>
     </aside>
   );
 }
 
-function Logomark() {
+function NavRow({ item, pathname }: { item: NavItem; pathname: string }) {
+  const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
+  const Icon = item.icon;
   return (
-    <svg
-      viewBox="0 0 32 32"
-      className="h-7 w-7 text-tender"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.4"
-      aria-hidden
-    >
-      <circle cx="16" cy="16" r="13" />
-      <circle cx="16" cy="16" r="8" />
-      <circle cx="16" cy="16" r="2.2" fill="currentColor" stroke="none" />
-      <path d="M16 3v6M16 23v6M3 16h6M23 16h6M6.7 6.7l4.2 4.2M21.1 21.1l4.2 4.2M25.3 6.7l-4.2 4.2M10.9 21.1l-4.2 4.2" />
-    </svg>
+    <li>
+      <Link
+        to={item.to}
+        className={cn(
+          "group flex items-center gap-2.5 rounded-md px-2.5 py-2 text-[13px] transition-colors",
+          active
+            ? "bg-primary-muted text-primary"
+            : "text-muted-foreground hover:bg-surface-1 hover:text-foreground",
+        )}
+      >
+        <Icon className={cn("h-4 w-4 shrink-0", active ? "text-primary" : "text-subtle-foreground")} strokeWidth={1.7} />
+        <span className="flex-1 truncate">{item.label}</span>
+        {item.badge !== undefined && (
+          <span
+            className={cn(
+              "font-mono text-[10.5px] tabular",
+              active ? "text-primary" : "text-subtle-foreground",
+            )}
+          >
+            {item.badge}
+          </span>
+        )}
+      </Link>
+    </li>
   );
 }
