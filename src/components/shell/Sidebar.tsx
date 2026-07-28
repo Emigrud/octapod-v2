@@ -41,16 +41,6 @@ const SETTINGS_NAV: NavItem[] = [
   { to: "/settings/alerts", label: "Alerts & Subscriptions", icon: BellRing },
 ];
 
-const COVERAGE = [
-  { code: "FI", flag: "🇫🇮" },
-  { code: "SE", flag: "🇸🇪" },
-  { code: "NO", flag: "🇳🇴" },
-  { code: "DK", flag: "🇩🇰" },
-  { code: "EE", flag: "🇪🇪" },
-  { code: "LV", flag: "🇱🇻" },
-  { code: "LT", flag: "🇱🇹" },
-  { code: "PL", flag: "🇵🇱" },
-];
 
 export function Sidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -79,21 +69,6 @@ export function Sidebar() {
         </ul>
       </nav>
 
-      <div className="mx-3 mb-2 rounded-md border border-hairline bg-surface-1 p-3">
-        <div className="text-eyebrow">Data coverage</div>
-        <div className="mt-1 text-[11.5px] text-muted-foreground">8 Countries</div>
-        <div className="mt-2 flex flex-wrap gap-1">
-          {COVERAGE.map((c) => (
-            <span
-              key={c.code}
-              title={c.code}
-              className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-hairline bg-surface-2 text-[11px] leading-none"
-            >
-              {c.flag}
-            </span>
-          ))}
-        </div>
-      </div>
 
       <div className="mx-3 mb-2 rounded-md border border-hairline bg-surface-1 p-3">
         <div className="text-eyebrow">System status</div>
