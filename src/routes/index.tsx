@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Radio, Target, Wallet, CalendarDays, Globe2, SlidersHorizontal } from "lucide-react";
+import { Radio, Target, Wallet, CalendarDays, SlidersHorizontal } from "lucide-react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import {
   KpiCard,
@@ -83,12 +83,12 @@ function DashboardPage() {
           spark={[18, 20, 22, 24, 23, 27, 28, 30, 31, 33, 35, 37]}
         />
         <KpiCard
-          tile="violet"
-          label="Countries Covered"
-          value="8"
-          icon={<Globe2 className="h-4 w-4" />}
-          delta={{ direction: "flat", text: "Nordic & Baltic" }}
-          spark={[3, 4, 4, 5, 6, 6, 7, 7, 7, 8, 8, 8]}
+          tile="green"
+          label="Projects 6–24 Months Out"
+          value="37"
+          icon={<CalendarDays className="h-4 w-4" />}
+          delta={{ direction: "up", text: "11 new" }}
+          spark={[18, 20, 22, 24, 23, 27, 28, 30, 31, 33, 35, 37]}
         />
       </section>
 
