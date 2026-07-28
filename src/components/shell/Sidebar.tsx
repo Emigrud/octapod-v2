@@ -62,11 +62,11 @@ export function Sidebar() {
           ))}
         </ul>
 
-        <div className="px-4 pt-5 pb-2">
+        <div className="px-3 pt-6 pb-3">
           <img
             src={logoAsset.url}
             alt="oktapod"
-            className="mx-auto h-auto w-full max-w-[170px] object-contain"
+            className="h-auto w-full object-contain"
           />
         </div>
       </nav>
