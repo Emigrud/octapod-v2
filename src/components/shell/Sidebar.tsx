@@ -47,11 +47,8 @@ export function Sidebar() {
 
   return (
     <aside className="hidden md:flex md:w-[228px] shrink-0 flex-col hairline-r bg-surface-2/60">
-      <div className="flex h-16 items-center gap-2 px-5">
-        <img src={logoAsset.url} alt="oktapod" className="h-8 w-8 object-contain" />
-        <span className="font-display text-[20px] font-semibold text-primary lowercase tracking-tight">
-          oktapod
-        </span>
+      <div className="flex h-16 items-center px-5">
+        <img src={logoAsset.url} alt="oktapod" className="h-10 w-auto object-contain" />
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 pb-4">
