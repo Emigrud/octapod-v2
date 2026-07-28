@@ -61,6 +61,14 @@ export function Sidebar() {
             <NavRow key={item.to} item={item} pathname={pathname} />
           ))}
         </ul>
+
+        <div className="px-4 pt-5 pb-2">
+          <img
+            src={logoAsset.url}
+            alt="oktapod"
+            className="mx-auto h-auto w-full max-w-[170px] object-contain"
+          />
+        </div>
       </nav>
 
 
@@ -86,9 +94,6 @@ export function Sidebar() {
         <span className="text-subtle-foreground">›</span>
       </button>
 
-      <div className="px-4 pb-5">
-        <img src={logoAsset.url} alt="oktapod" className="h-auto w-full object-contain" />
-      </div>
     </aside>
   );
 }
