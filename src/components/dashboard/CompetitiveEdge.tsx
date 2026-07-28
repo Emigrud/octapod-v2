@@ -21,35 +21,35 @@ function DualLineChart() {
   return (
     <svg viewBox={`0 0 ${w} ${h}`} className="w-full" preserveAspectRatio="none" aria-hidden>
       <path d={toPath(market)} fill="none" stroke="var(--subtle-foreground)" strokeWidth="1.2" strokeDasharray="3 3" />
-      <path d={toPath(you)} fill="none" stroke="var(--accent-tender)" strokeWidth="1.6" strokeLinecap="round" />
+      <path d={toPath(you)} fill="none" stroke="var(--accent-primary)" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   );
 }
 
 export function CompetitiveEdge() {
   return (
-    <section className="flex h-full flex-col rounded-md border border-hairline bg-surface-1/60">
+    <section className="flex h-full flex-col rounded-md border border-hairline bg-surface-1">
       <header className="flex items-center justify-between px-4 py-3 hairline-b">
-        <div className="font-display text-[14px] font-medium text-foreground">
-          Your competitive edge
+        <div className="font-display text-[14px] font-semibold text-foreground">
+          Your Competitive Edge
         </div>
       </header>
 
       <div className="flex-1 space-y-3 px-4 py-3">
         <div>
-          <div className="font-mono text-[36px] font-medium leading-none text-tender tabular">
-            412 <span className="text-[18px] text-foreground/80">days</span>
+          <div className="font-mono text-[38px] font-semibold leading-none text-primary tabular">
+            412 <span className="text-[16px] font-medium text-foreground/80">days</span>
           </div>
           <p className="mt-2 text-[11.5px] leading-relaxed text-muted-foreground">
             Average lead start on projects before tender publication vs market average: 61 days.
           </p>
         </div>
 
-        <div className="rounded-sm border border-hairline bg-surface-2/40 p-3">
+        <div className="rounded-md border border-hairline bg-surface-2/40 p-3">
           <DualLineChart />
-          <div className="mt-2 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.14em] text-subtle-foreground">
+          <div className="mt-2 flex items-center gap-3 text-[10.5px] text-subtle-foreground">
             <span className="inline-flex items-center gap-1">
-              <span className="h-0.5 w-3 bg-tender" /> You
+              <span className="h-0.5 w-3 bg-primary" /> You
             </span>
             <span className="inline-flex items-center gap-1">
               <span className="h-0.5 w-3 bg-subtle-foreground/70" /> Market avg.
@@ -57,12 +57,8 @@ export function CompetitiveEdge() {
           </div>
         </div>
 
-        <button
-          type="button"
-          className="inline-flex items-center gap-1.5 text-[12px] font-medium text-tender hover:opacity-80"
-        >
-          How we calculate this
-          <ArrowRight className="h-3.5 w-3.5" />
+        <button className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-primary hover:opacity-80">
+          How we calculate this <ArrowRight className="h-3.5 w-3.5" />
         </button>
       </div>
     </section>

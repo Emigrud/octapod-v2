@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Sparkline } from "./Sparkline";
 
-export type KpiVariant = "tender" | "signal" | "neutral";
+export type KpiTile = "blue" | "teal" | "orange" | "green" | "violet" | "neutral";
 
 interface KpiCardProps {
   label: string;
@@ -10,10 +10,19 @@ interface KpiCardProps {
   delta?: { direction: "up" | "down" | "flat"; text: string };
   icon?: ReactNode;
   spark?: number[];
-  variant?: KpiVariant;
+  tile?: KpiTile;
   trailing?: ReactNode;
   className?: string;
 }
+
+const TILE_CLASSES: Record<KpiTile, string> = {
+  blue: "bg-tile-blue text-tile-blue-fg",
+  teal: "bg-tile-teal text-tile-teal-fg",
+  orange: "bg-tile-orange text-tile-orange-fg",
+  green: "bg-tile-green text-tile-green-fg",
+  violet: "bg-tile-violet text-tile-violet-fg",
+  neutral: "bg-surface-2 text-muted-foreground",
+};
 
 export function KpiCard({
   label,
@@ -21,16 +30,14 @@ export function KpiCard({
   delta,
   icon,
   spark,
-  variant = "tender",
+  tile = "blue",
   trailing,
   className,
 }: KpiCardProps) {
-  const accent =
-    variant === "tender" ? "var(--accent-tender)" : variant === "signal" ? "var(--accent-signal)" : "var(--muted-foreground)";
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-md border border-hairline bg-surface-1/70 p-4",
+        "relative overflow-hidden rounded-md border border-hairline bg-surface-1 p-4",
         className,
       )}
     >
@@ -38,33 +45,29 @@ export function KpiCard({
         {icon && (
           <span
             className={cn(
-              "flex h-9 w-9 shrink-0 items-center justify-center rounded-sm border border-hairline",
-              variant === "tender" && "bg-tender-muted text-tender",
-              variant === "signal" && "bg-signal-muted text-signal",
-              variant === "neutral" && "bg-surface-2/60 text-muted-foreground",
+              "flex h-10 w-10 shrink-0 items-center justify-center rounded-md",
+              TILE_CLASSES[tile],
             )}
           >
             {icon}
           </span>
         )}
         <div className="min-w-0 flex-1">
-          <div className="text-eyebrow truncate">{label}</div>
-          <div className="mt-1.5 flex items-baseline gap-1.5">
-            <span className="font-mono text-[26px] font-medium leading-none text-foreground tabular">
-              {value}
-            </span>
+          <div className="truncate text-[11.5px] font-medium text-muted-foreground">{label}</div>
+          <div className="mt-1 font-mono text-[28px] font-semibold leading-none text-foreground tabular">
+            {value}
           </div>
           {delta && (
             <div
               className={cn(
-                "mt-2 flex items-center gap-1 font-mono text-[10.5px] tracking-[0.04em]",
-                delta.direction === "up" && "text-tender",
+                "mt-2 flex items-center gap-1 text-[11px]",
+                delta.direction === "up" && "text-success",
                 delta.direction === "down" && "text-danger",
                 delta.direction === "flat" && "text-subtle-foreground",
               )}
             >
-              <span>
-                {delta.direction === "up" ? "↑" : delta.direction === "down" ? "↓" : "→"}
+              <span className="font-mono">
+                {delta.direction === "up" ? "↑" : delta.direction === "down" ? "↓" : "·"}
               </span>
               <span className="text-muted-foreground">{delta.text}</span>
             </div>
@@ -72,8 +75,8 @@ export function KpiCard({
         </div>
       </div>
       {(spark || trailing) && (
-        <div className="pointer-events-none absolute bottom-3 right-3 opacity-90">
-          {trailing ?? (spark && <Sparkline points={spark} stroke={accent} />)}
+        <div className="pointer-events-none absolute bottom-3 right-3 opacity-95">
+          {trailing ?? (spark && <Sparkline points={spark} stroke="var(--accent-primary)" />)}
         </div>
       )}
     </div>
