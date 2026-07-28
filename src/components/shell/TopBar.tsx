@@ -3,9 +3,10 @@ import { ChevronDown, Search } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 
 export function TopBar() {
-  const [utc, setUtc] = useState<string>(() => formatUtc(new Date()));
+  const [utc, setUtc] = useState<string | null>(null);
 
   useEffect(() => {
+    setUtc(formatUtc(new Date()));
     const id = window.setInterval(() => setUtc(formatUtc(new Date())), 1000);
     return () => window.clearInterval(id);
   }, []);
@@ -39,7 +40,7 @@ export function TopBar() {
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-success/80 shadow-[0_0_8px_var(--status-success)]" />
           <span>All sources idle</span>
           <span className="text-hairline">·</span>
-          <span className="tabular text-muted-foreground">{utc} UTC</span>
+          <span className="tabular text-muted-foreground min-w-[64px]">{utc ?? "—"}</span>
         </div>
         <ThemeToggle />
       </div>
