@@ -21,7 +21,7 @@ export function TopBar() {
           className="inline-flex items-center gap-2 rounded-md border border-hairline bg-surface-1 px-3 py-1.5 text-[12.5px] text-foreground hover:border-primary/40"
         >
           <Building2 className="h-3.5 w-3.5 text-subtle-foreground" />
-          <span>Demo Construction Oy</span>
+          <span>Demo Only</span>
           <ChevronDown className="h-3.5 w-3.5 text-subtle-foreground" />
         </button>
 
