@@ -88,7 +88,7 @@ function DashboardPage() {
         <BriefingCard />
       </section>
 
-      <section className="grid gap-4 xl:grid-cols-[minmax(0,5fr)_minmax(0,4fr)]">
+      <section className="grid gap-4 xl:grid-cols-2">
         <div className="min-h-[560px]">
           <MapPlaceholder />
         </div>
