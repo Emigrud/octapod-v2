@@ -62,11 +62,11 @@ export function Sidebar() {
           ))}
         </ul>
 
-        <div className="pt-6 pb-3">
+        <div className="overflow-visible pt-8 pb-4">
           <img
             src={logoAsset.url}
             alt="oktapod"
-            className="h-auto w-full object-contain"
+            className="h-auto w-full scale-125 object-contain"
           />
         </div>
       </nav>
