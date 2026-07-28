@@ -47,9 +47,6 @@ export function Sidebar() {
 
   return (
     <aside className="hidden md:flex md:w-[228px] shrink-0 flex-col hairline-r bg-surface-2/60">
-      <div className="flex h-16 items-center px-5">
-        <img src={logoAsset.url} alt="oktapod" className="h-10 w-auto object-contain" />
-      </div>
 
       <nav className="flex-1 overflow-y-auto px-3 pb-4">
         <ul className="space-y-0.5">
@@ -80,7 +77,7 @@ export function Sidebar() {
 
       <button
         type="button"
-        className="mx-3 mb-4 inline-flex items-center justify-between gap-2 rounded-md border border-hairline bg-surface-1 px-3 py-2 text-[12px] text-foreground hover:border-primary/40 hover:bg-primary-muted"
+        className="mx-3 mb-3 inline-flex items-center justify-between gap-2 rounded-md border border-hairline bg-surface-1 px-3 py-2 text-[12px] text-foreground hover:border-primary/40 hover:bg-primary-muted"
       >
         <span className="inline-flex items-center gap-2">
           <Sparkles className="h-3.5 w-3.5 text-primary" />
@@ -88,6 +85,10 @@ export function Sidebar() {
         </span>
         <span className="text-subtle-foreground">›</span>
       </button>
+
+      <div className="px-4 pb-5">
+        <img src={logoAsset.url} alt="oktapod" className="h-auto w-full object-contain" />
+      </div>
     </aside>
   );
 }
