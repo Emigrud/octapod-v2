@@ -11,8 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignalsRouteImport } from './routes/signals'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as OpportunitiesRouteImport } from './routes/opportunities'
 import { Route as MapRouteImport } from './routes/map'
+import { Route as CompetitorsRouteImport } from './routes/competitors'
+import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SignalsRoute = SignalsRouteImport.update({
@@ -25,6 +29,16 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsRoute = ProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OpportunitiesRoute = OpportunitiesRouteImport.update({
   id: '/opportunities',
   path: '/opportunities',
@@ -35,6 +49,16 @@ const MapRoute = MapRouteImport.update({
   path: '/map',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompetitorsRoute = CompetitorsRouteImport.update({
+  id: '/competitors',
+  path: '/competitors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalendarRoute = CalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -43,38 +67,82 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/calendar': typeof CalendarRoute
+  '/competitors': typeof CompetitorsRoute
   '/map': typeof MapRoute
   '/opportunities': typeof OpportunitiesRoute
+  '/projects': typeof ProjectsRoute
+  '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
   '/signals': typeof SignalsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/calendar': typeof CalendarRoute
+  '/competitors': typeof CompetitorsRoute
   '/map': typeof MapRoute
   '/opportunities': typeof OpportunitiesRoute
+  '/projects': typeof ProjectsRoute
+  '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
   '/signals': typeof SignalsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/calendar': typeof CalendarRoute
+  '/competitors': typeof CompetitorsRoute
   '/map': typeof MapRoute
   '/opportunities': typeof OpportunitiesRoute
+  '/projects': typeof ProjectsRoute
+  '/reports': typeof ReportsRoute
   '/settings': typeof SettingsRoute
   '/signals': typeof SignalsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/map' | '/opportunities' | '/settings' | '/signals'
+  fullPaths:
+    | '/'
+    | '/calendar'
+    | '/competitors'
+    | '/map'
+    | '/opportunities'
+    | '/projects'
+    | '/reports'
+    | '/settings'
+    | '/signals'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/map' | '/opportunities' | '/settings' | '/signals'
-  id: '__root__' | '/' | '/map' | '/opportunities' | '/settings' | '/signals'
+  to:
+    | '/'
+    | '/calendar'
+    | '/competitors'
+    | '/map'
+    | '/opportunities'
+    | '/projects'
+    | '/reports'
+    | '/settings'
+    | '/signals'
+  id:
+    | '__root__'
+    | '/'
+    | '/calendar'
+    | '/competitors'
+    | '/map'
+    | '/opportunities'
+    | '/projects'
+    | '/reports'
+    | '/settings'
+    | '/signals'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CalendarRoute: typeof CalendarRoute
+  CompetitorsRoute: typeof CompetitorsRoute
   MapRoute: typeof MapRoute
   OpportunitiesRoute: typeof OpportunitiesRoute
+  ProjectsRoute: typeof ProjectsRoute
+  ReportsRoute: typeof ReportsRoute
   SettingsRoute: typeof SettingsRoute
   SignalsRoute: typeof SignalsRoute
 }
@@ -95,6 +163,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects': {
+      id: '/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/opportunities': {
       id: '/opportunities'
       path: '/opportunities'
@@ -109,6 +191,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MapRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/competitors': {
+      id: '/competitors'
+      path: '/competitors'
+      fullPath: '/competitors'
+      preLoaderRoute: typeof CompetitorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calendar': {
+      id: '/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof CalendarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -121,8 +217,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CalendarRoute: CalendarRoute,
+  CompetitorsRoute: CompetitorsRoute,
   MapRoute: MapRoute,
   OpportunitiesRoute: OpportunitiesRoute,
+  ProjectsRoute: ProjectsRoute,
+  ReportsRoute: ReportsRoute,
   SettingsRoute: SettingsRoute,
   SignalsRoute: SignalsRoute,
 }
