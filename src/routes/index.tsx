@@ -49,7 +49,7 @@ function DashboardPage() {
         }
       />
 
-      <section className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
+      <section className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-4">
         <KpiCard
           tile="orange"
           label="Early Signals"
@@ -73,14 +73,6 @@ function DashboardPage() {
           icon={<Wallet className="h-4 w-4" />}
           delta={{ direction: "up", text: "12% vs last 30 days" }}
           spark={[5.2, 5.6, 5.9, 6.3, 6.1, 6.8, 7.0, 7.2, 7.6, 7.9, 8.3, 8.7]}
-        />
-        <KpiCard
-          tile="green"
-          label="Projects 6–24 Months Out"
-          value="37"
-          icon={<CalendarDays className="h-4 w-4" />}
-          delta={{ direction: "up", text: "11 new" }}
-          spark={[18, 20, 22, 24, 23, 27, 28, 30, 31, 33, 35, 37]}
         />
         <KpiCard
           tile="green"
