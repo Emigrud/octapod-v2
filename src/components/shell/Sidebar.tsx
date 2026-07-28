@@ -62,7 +62,7 @@ export function Sidebar() {
           ))}
         </ul>
 
-        <div className="px-3 pt-6 pb-3">
+        <div className="pt-6 pb-3">
           <img
             src={logoAsset.url}
             alt="oktapod"
