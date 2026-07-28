@@ -40,7 +40,7 @@ export function TopBar() {
           <span className="inline-block h-1.5 w-1.5 rounded-full bg-success/80 shadow-[0_0_8px_var(--status-success)]" />
           <span>All sources idle</span>
           <span className="text-hairline">·</span>
-          <span className="tabular text-muted-foreground min-w-[64px]">{utc ?? "—"}</span>
+          <span className="tabular text-muted-foreground min-w-[80px]">{utc ? `${utc} UTC` : "— UTC"}</span>
         </div>
         <ThemeToggle />
       </div>
