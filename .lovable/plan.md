@@ -1,24 +1,15 @@
-# Plan: Move and enlarge the sidebar logo
+Goal: Reposition the large transparent logo so it appears in the empty space immediately below the "Alerts & Subscriptions" settings item, not at the bottom of the sidebar.
 
-## Goal
-Make the oktapod logo much larger and relocate it from the top of the sidebar to the bottom-left area, so it acts as a bold footer mark rather than a small header icon.
+What I will change:
+1. In `src/components/shell/Sidebar.tsx`:
+   - Remove the current `<img>` logo block from the very bottom of the `<aside>` (below the "What's new" button).
+   - Insert the logo block inside the `<nav>` directly after the SETTINGS_NAV list that ends with "Alerts & Subscriptions".
+   - Keep the logo sizable but proportional: `w-full max-w-[180px] h-auto mx-auto` with `pt-4 pb-2` so it sits in the new gap without crowding the nav items.
+   - Tighten the outer bottom padding of the `<nav>` or adjust the system-status cards if needed to keep the overall sidebar height balanced.
 
-## Current state
-- The sidebar is a fixed 228 px wide left rail (`md:w-[228px]`).
-- The logo is currently rendered at the top of the sidebar as a 40 px tall image (`h-10`) next to no other text.
-- The bottom of the sidebar currently contains a "System status" card and a "What's new" button.
-- The logo asset is already loaded via `src/assets/oktapod-logo-transparent.png.asset.json` and imported in `src/components/shell/Sidebar.tsx`.
+What will stay the same:
+- The navigation items, ordering, badges, and system-status / "What's new" cards remain unchanged.
+- No backend, database, auth, or new routes are created.
+- The light/dark theme and design tokens are untouched.
 
-## Changes
-1. **Remove the top logo block** from the sidebar header area.
-2. **Add a footer logo block** at the very bottom of the sidebar, below the existing "What's new" button.
-3. **Enlarge the logo** so it fills the available sidebar width with comfortable padding (target roughly 180–200 px wide, height auto to preserve the original aspect ratio of the uploaded horizontal logo).
-4. **Preserve spacing and alignment** so the logo does not overlap the system-status/what's-new items and stays visually anchored in the bottom-left.
-5. **No functional changes** — no backend, navigation, or routing work.
-
-## Files to edit
-- `src/components/shell/Sidebar.tsx` — move and resize the logo markup.
-
-## Verification
-- Run a TypeScript check (`bunx tsc --noEmit`) to confirm the component still compiles.
-- Visually confirm the logo appears at the bottom of the sidebar at a much larger size and remains fully inside the rail.
+Expected result: A large, readable logo appears centered in the sidebar directly below the Alerts & Subscriptions link, with system status and What's new still stacked below it near the bottom.
