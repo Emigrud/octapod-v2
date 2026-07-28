@@ -84,12 +84,13 @@ function DashboardPage() {
         />
       </section>
 
-      <section className="grid gap-4 xl:grid-cols-[minmax(0,3fr)_minmax(0,5fr)_minmax(0,3fr)]">
+      <section className="min-h-[420px]">
+        <BriefingCard />
+      </section>
+
+      <section className="grid gap-4 xl:grid-cols-[minmax(0,5fr)_minmax(0,4fr)]">
         <div className="min-h-[560px]">
           <MapPlaceholder />
-        </div>
-        <div className="min-h-[560px]">
-          <BriefingCard />
         </div>
         <div className="min-h-[560px]">
           <SignalsFeed />
