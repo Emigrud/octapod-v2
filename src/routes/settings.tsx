@@ -70,6 +70,113 @@ function SettingsPage() {
   );
 }
 
+function DataSourceStatusPanel({
+  status,
+}: {
+  status: {
+    mode: DataSourceMode;
+    lovableCloudConnected: boolean;
+    supabaseConfigured: boolean;
+    projectHost?: string;
+    projectRef?: string;
+  };
+}) {
+  const modeLabel: Record<DataSourceMode, string> = {
+    lovable_cloud: "Lovable Cloud",
+    external_supabase: "External Supabase",
+    disconnected: "Not configured",
+  };
+
+  const modeDescription: Record<DataSourceMode, string> = {
+    lovable_cloud:
+      "This project is using the managed Lovable Cloud backend. Disconnect in Cloud → Advanced if you want to point it to your own Supabase project.",
+    external_supabase:
+      "Lovable Cloud is disconnected and the app is pointed at an external Supabase database.",
+    disconnected:
+      "No Supabase database is configured. Add SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY to connect an external project.",
+  };
+
+  const isHealthy = status.mode === "external_supabase";
+
+  return (
+    <Card className="border-hairline bg-surface-1/50 shadow-none">
+      <CardHeader className="pb-4">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="flex h-7 w-7 items-center justify-center rounded-sm border border-hairline bg-surface-2/60">
+              <Database className="h-4 w-4 text-primary" />
+            </span>
+            <div>
+              <CardTitle className="text-[15px] font-medium">Data source</CardTitle>
+              <CardDescription className="text-[12.5px]">
+                Backend connection status and mode
+              </CardDescription>
+            </div>
+          </div>
+          <Badge
+            variant={isHealthy ? "default" : status.mode === "lovable_cloud" ? "secondary" : "destructive"}
+            className="text-[11px]"
+          >
+            {modeLabel[status.mode]}
+          </Badge>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4 pt-0">
+        <div className="grid gap-3 sm:grid-cols-2">
+          <StatusRow
+            icon={status.lovableCloudConnected ? <Cloud className="h-4 w-4" /> : <Unplug className="h-4 w-4" />}
+            label="Lovable Cloud"
+            value={status.lovableCloudConnected ? "Connected" : "Disconnected"}
+            healthy={!status.lovableCloudConnected}
+          />
+          <StatusRow
+            icon={status.supabaseConfigured ? <CheckCircle2 className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
+            label="Supabase credentials"
+            value={status.supabaseConfigured ? "Configured" : "Missing"}
+            healthy={status.supabaseConfigured}
+          />
+        </div>
+
+        {status.projectRef && status.projectHost && (
+          <div className="rounded-md border border-hairline bg-surface-2/40 px-3 py-2">
+            <div className="text-[10.5px] uppercase tracking-wider text-subtle-foreground">Connected project</div>
+            <div className="mt-0.5 font-mono text-[12.5px] text-foreground">
+              {status.projectRef}
+              <span className="text-subtle-foreground"> · {status.projectHost}</span>
+            </div>
+          </div>
+        )}
+
+        <p className="text-[12.5px] leading-relaxed text-muted-foreground">
+          {modeDescription[status.mode]}
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
+function StatusRow({
+  icon,
+  label,
+  value,
+  healthy,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  healthy: boolean;
+}) {
+  return (
+    <div className="flex items-center gap-3 rounded-md border border-hairline bg-surface-2/40 px-3 py-2.5">
+      <span className={healthy ? "text-status-success" : "text-status-danger"}>{icon}</span>
+      <div className="flex-1">
+        <div className="text-[11px] text-subtle-foreground">{label}</div>
+        <div className={`text-[12.5px] font-medium ${healthy ? "text-foreground" : "text-status-danger"}`}>{value}</div>
+      </div>
+    </div>
+  );
+}
+
 function PrefCard({
   icon,
   title,
