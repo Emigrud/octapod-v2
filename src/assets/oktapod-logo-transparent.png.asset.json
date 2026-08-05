@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "8edbf182-d474-40db-a40e-0126d36842f3",
-  "project_id": "ca7e1814-e222-47e3-b7eb-d7c2e7db6a57",
-  "url": "/__l5e/assets-v1/8edbf182-d474-40db-a40e-0126d36842f3/oktapod-logo-transparent.png",
-  "r2_key": "a/v1/ca7e1814-e222-47e3-b7eb-d7c2e7db6a57/8edbf182-d474-40db-a40e-0126d36842f3/oktapod-logo-transparent.png",
-  "original_filename": "oktapod-logo-transparent.png",
-  "size": 2105747,
   "content_type": "image/png",
-  "created_at": "2026-07-28T13:25:31Z"
+  "created_at": "2026-07-28T13:25:31Z",
+  "original_filename": "oktapod-logo-transparent.png",
+  "project_id": "e481dc0e-7a09-4211-af00-a3ba0a654bac",
+  "r2_key": "a/v1/e481dc0e-7a09-4211-af00-a3ba0a654bac/8edbf182-d474-40db-a40e-0126d36842f3/oktapod-logo-transparent.png",
+  "size": 2105747,
+  "url": "/__l5e/assets-v1/8edbf182-d474-40db-a40e-0126d36842f3/oktapod-logo-transparent.png",
+  "version": 1
 }
