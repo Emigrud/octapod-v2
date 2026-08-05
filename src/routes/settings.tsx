@@ -30,6 +30,8 @@ export const Route = createFileRoute("/settings")({
 });
 
 function SettingsPage() {
+  const { dataSourceStatus } = Route.useLoaderData();
+
   return (
     <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-6 px-6 py-8">
       <PageHeader
@@ -37,6 +39,8 @@ function SettingsPage() {
         title="Set up your organization profile."
         description="Your capabilities, sectors, target countries, project size range, languages and certifications drive every fit score. Nothing is scored until this profile exists."
       />
+
+      <DataSourceStatusPanel status={dataSourceStatus} />
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <PrefCard
