@@ -1,7 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Settings2, Building2, Layers, Globe2 } from "lucide-react";
+import { Settings2, Building2, Layers, Globe2, Database, Cloud, CheckCircle2, AlertCircle, Unplug } from "lucide-react";
 import { EmptyState } from "@/components/octapod";
 import { PageHeader } from "@/components/shell/PageHeader";
+import { getDataSourceStatus, type DataSourceMode } from "@/lib/data-source.functions";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
