@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.1",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "octapod-chart-room",
+      "version": "0.1.0",
+      "title": "Octapod Chart Room"
+    },
+    "tools": [
+      {
+        "name": "list_early_signals",
+        "title": "List early signals",
+        "description": "List early market signals (grid, wind, solar, data center) tracked in the OCTAPOD pilot, newest first.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "country": {
+              "description": "Optional ISO 3166-1 alpha-2 country code filter, e.g. FI.",
+              "type": "string"
+            },
+            "sector": {
+              "description": "Optional sector filter, e.g. Power Grid, Wind, Solar.",
+              "type": "string"
+            },
+            "impact": {
+              "description": "Optional impact filter.",
+              "type": "string",
+              "enum": [
+                "High",
+                "Medium",
+                "Low"
+              ]
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_opportunities",
+        "title": "List opportunities",
+        "description": "List tender/project opportunities in the OCTAPOD pilot pipeline with fit score, value band, status and deadline.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "min_fit_score": {
+              "description": "Only return opportunities whose fit score is at least this value (0-100).",
+              "type": "number"
+            },
+            "sector": {
+              "description": "Optional sector filter, e.g. Power Grid, Wind, Solar.",
+              "type": "string"
+            },
+            "country": {
+              "description": "Optional ISO 3166-1 alpha-2 country code filter, e.g. FI.",
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_market_overview",
+        "title": "Get market overview",
+        "description": "Get the Nordic/Baltic market overview: project-activity hotspots per country with intensity, plus the pilot market.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_dashboard_kpis",
+        "title": "Get dashboard KPIs",
+        "description": "Get the at-a-glance dashboard KPIs: early signals, high-fit opportunities, total projects value and projects 6–24 months out.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_situational_briefing",
+        "title": "Get situational awareness briefing",
+        "description": "Get the AI situational awareness briefing: key developments and recommended actions. Currently returns placeholder pilot content.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
