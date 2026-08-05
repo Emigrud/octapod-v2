@@ -22,6 +22,10 @@ export const Route = createFileRoute("/settings")({
       },
     ],
   }),
+  loader: async () => {
+    const status = await getDataSourceStatus();
+    return { dataSourceStatus: status };
+  },
   component: SettingsPage,
 });
 
