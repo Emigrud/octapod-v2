@@ -75,25 +75,21 @@ function DataSourceStatusPanel({
 }: {
   status: {
     mode: DataSourceMode;
-    lovableCloudConnected: boolean;
     supabaseConfigured: boolean;
     projectHost?: string;
     projectRef?: string;
   };
 }) {
   const modeLabel: Record<DataSourceMode, string> = {
-    lovable_cloud: "Lovable Cloud",
     external_supabase: "External Supabase",
     disconnected: "Not configured",
   };
 
   const modeDescription: Record<DataSourceMode, string> = {
-    lovable_cloud:
-      "This project is using the managed Lovable Cloud backend. Disconnect in Cloud → Advanced if you want to point it to your own Supabase project.",
     external_supabase:
-      "Lovable Cloud is disconnected and the app is pointed at an external Supabase database.",
+      "The app is pointed at your own external Supabase project. Migrations and data live there.",
     disconnected:
-      "No Supabase database is configured. Add SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY to connect an external project.",
+      "No Supabase database is configured. Set SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY to connect your project.",
   };
 
   const isHealthy = status.mode === "external_supabase";
@@ -113,10 +109,7 @@ function DataSourceStatusPanel({
               </CardDescription>
             </div>
           </div>
-          <Badge
-            variant={isHealthy ? "default" : status.mode === "lovable_cloud" ? "secondary" : "destructive"}
-            className="text-[11px]"
-          >
+          <Badge variant={isHealthy ? "default" : "destructive"} className="text-[11px]">
             {modeLabel[status.mode]}
           </Badge>
         </div>
@@ -124,10 +117,10 @@ function DataSourceStatusPanel({
       <CardContent className="space-y-4 pt-0">
         <div className="grid gap-3 sm:grid-cols-2">
           <StatusRow
-            icon={status.lovableCloudConnected ? <Cloud className="h-4 w-4" /> : <Unplug className="h-4 w-4" />}
-            label="Lovable Cloud"
-            value={status.lovableCloudConnected ? "Connected" : "Disconnected"}
-            healthy={!status.lovableCloudConnected}
+            icon={isHealthy ? <Cloud className="h-4 w-4" /> : <Unplug className="h-4 w-4" />}
+            label="Backend"
+            value={isHealthy ? "External Supabase" : "None"}
+            healthy={isHealthy}
           />
           <StatusRow
             icon={status.supabaseConfigured ? <CheckCircle2 className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
@@ -136,6 +129,7 @@ function DataSourceStatusPanel({
             healthy={status.supabaseConfigured}
           />
         </div>
+
 
         {status.projectRef && status.projectHost && (
           <div className="rounded-md border border-hairline bg-surface-2/40 px-3 py-2">
