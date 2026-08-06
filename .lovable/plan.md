@@ -1,50 +1,39 @@
-# Connect external Supabase project
+# Credential swap to your external Supabase project
 
-## Goal
-Point the Lovable-hosted app at your own external Supabase database and verify the connection works.
+## Scope
+Repoint the app at your own Supabase project. No tables, no policies, no auth, no seed data.
 
-## Current state
-- Lovable Cloud is disconnected (confirmed by you).
-- The app has no backend schema or data: zero tables, zero migrations, zero RLS policies.
-- The Supabase integration files (`src/integrations/supabase/client.ts`, `client.server.ts`, `auth-middleware.ts`, `auth-attacher.ts`) are generic and only need the correct environment variables to work with your external project.
-- `src/lib/data-source.functions.ts` already reads `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` to detect the data source mode, and the Settings page already shows the status panel.
+## What I verified
+- `.env` and `supabase/config.toml` both still carry the old ref `jjclkucycmaxfyicprsd`.
+- Other mentions of "Lovable Cloud" are only wording in generated integration files and the Settings status panel — not credentials.
+- No migrations, no tables, no RLS policies exist in the project.
 
 ## Steps
 
-1. **Collect your external Supabase credentials**
-   - Project URL: `https://<project-ref>.supabase.co`
-   - Public (anon) key: starts with `eyJ…` (or `sb_publishable_…` for newer projects)
-   - Service role key: starts with `eyJ…` (or `sb_secret_…` for newer projects)
+1. **Collect credentials** (needed from you)
+   - Project URL: `https://<your-ref>.supabase.co`
+   - Publishable / anon key (`sb_publishable_…` or `eyJ…`)
+   - Service role key (`sb_secret_…` or `eyJ…`) — only if you want server-side privileged calls; optional for now.
 
-2. **Store credentials as project secrets**
-   - I will use the secure secrets form to set:
-     - `SUPABASE_URL`
-     - `SUPABASE_PUBLISHABLE_KEY`
-     - `SUPABASE_SERVICE_ROLE_KEY`
-   - These are server/runtime secrets; they are not written to `.env`.
+2. **Swap config**
+   - `.env`: set `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_PROJECT_ID`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_PROJECT_ID` to your project's values.
+   - `supabase/config.toml`: `project_id = "<your-ref>"`.
+   - Store the service role key (if provided) through the secure secrets form, not in `.env`.
 
-3. **Update client-visible variables**
-   - The browser client also needs `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`.
-   - I will set these as runtime secrets as well; the build will inject them where needed.
+3. **Regenerate types**
+   - Rewrite `src/integrations/supabase/types.ts` as an empty-but-valid `Database` type for your project. It will contain no tables, which is expected.
 
-4. **Verify the swap**
-   - Rebuild the app and confirm the dev server starts without missing-variable errors.
-   - Open `/settings` and confirm the **Data source** panel shows:
-     - Mode: **External Supabase**
-     - Lovable Cloud: **Disconnected**
-     - Supabase credentials: **Configured**
-     - Connected project ref/host matching your external project.
+4. **Clean up stale wording**
+   - Replace the "Connect Supabase in Lovable Cloud" error strings in `client.ts` / `client.server.ts` / `auth-middleware.ts` with neutral wording.
+   - Simplify the Settings **Data source** panel to report `External Supabase` plus the connected project ref, dropping the Lovable Cloud mode branch in `src/lib/data-source.functions.ts`.
 
-5. **Decide on schema**
-   - Because the app currently has no tables, no migration is required to make the swap.
-   - Once connected, you can decide whether to add tables (e.g., profile, opportunities, signals) in a separate follow-up.
+5. **Verify and report back**
+   - Restart the dev server and confirm no missing-variable errors.
+   - Load `/settings` and read back the connected project ref.
+   - Confirm: which ref the app points to, that no Lovable Cloud reference remains in code or config, and that any future migration runs against your project (the CLI reads `supabase/config.toml`'s `project_id`).
+
+## Note
+Disconnecting Lovable Cloud in the UI is a separate, admin-only action. If it is still connected, its managed environment values can override what I write into `.env`. If the verification in step 5 shows the old ref, that is the cause.
 
 ## What I need from you
-
-Please provide your external Supabase credentials so I can store them securely:
-
-- Project URL
-- Public (anon) key
-- Service role key
-
-You can paste them in the next message or I can open the secure secrets form.
+Your project URL and publishable key (and service role key if you want it stored). I will open the secure secrets form rather than have you paste the service role key in chat.
