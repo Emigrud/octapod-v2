@@ -42,6 +42,9 @@ function SettingsPage() {
 
       <DataSourceStatusPanel status={dataSourceStatus} />
 
+      <OrganizationCard />
+
+
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <PrefCard
           icon={<Building2 className="h-4 w-4 text-tender" />}
