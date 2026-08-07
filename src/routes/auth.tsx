@@ -54,9 +54,10 @@ const orgNameSchema = z
   .min(2, { message: "Organization name is required" })
   .max(120, { message: "Organization name must be under 120 characters" });
 
-function firstError(result: z.SafeParseReturnType<unknown, unknown>): string | null {
-  return result.success ? null : (result.error.issues[0]?.message ?? "Invalid input");
+function firstError(result: { success: boolean; error?: { issues: { message: string }[] } }): string | null {
+  return result.success ? null : (result.error?.issues[0]?.message ?? "Invalid input");
 }
+
 
 function AuthPage() {
   return (
