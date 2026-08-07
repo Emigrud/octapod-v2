@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedSignalsRouteImport } from './routes/_authenticated/signals'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
@@ -19,55 +20,60 @@ import { Route as AuthenticatedMapRouteImport } from './routes/_authenticated/ma
 import { Route as AuthenticatedCompetitorsRouteImport } from './routes/_authenticated/competitors'
 import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
 
-const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
-  id: '/_authenticated/',
-  path: '/',
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSignalsRoute = AuthenticatedSignalsRouteImport.update({
-  id: '/_authenticated/signals',
+  id: '/signals',
   path: '/signals',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
-  id: '/_authenticated/settings',
+  id: '/settings',
   path: '/settings',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
-  id: '/_authenticated/reports',
+  id: '/reports',
   path: '/reports',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedProjectsRoute = AuthenticatedProjectsRouteImport.update({
-  id: '/_authenticated/projects',
+  id: '/projects',
   path: '/projects',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedOpportunitiesRoute =
   AuthenticatedOpportunitiesRouteImport.update({
-    id: '/_authenticated/opportunities',
+    id: '/opportunities',
     path: '/opportunities',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedMapRoute = AuthenticatedMapRouteImport.update({
-  id: '/_authenticated/map',
+  id: '/map',
   path: '/map',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedCompetitorsRoute =
   AuthenticatedCompetitorsRouteImport.update({
-    id: '/_authenticated/competitors',
+    id: '/competitors',
     path: '/competitors',
-    getParentRoute: () => rootRouteImport,
+    getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedCalendarRoute = AuthenticatedCalendarRouteImport.update({
-  id: '/_authenticated/calendar',
+  id: '/calendar',
   path: '/calendar',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof AuthenticatedIndexRoute
   '/calendar': typeof AuthenticatedCalendarRoute
   '/competitors': typeof AuthenticatedCompetitorsRoute
   '/map': typeof AuthenticatedMapRoute
@@ -76,7 +82,6 @@ export interface FileRoutesByFullPath {
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/signals': typeof AuthenticatedSignalsRoute
-  '/': typeof AuthenticatedIndexRoute
 }
 export interface FileRoutesByTo {
   '/calendar': typeof AuthenticatedCalendarRoute
@@ -91,6 +96,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/_authenticated/calendar': typeof AuthenticatedCalendarRoute
   '/_authenticated/competitors': typeof AuthenticatedCompetitorsRoute
   '/_authenticated/map': typeof AuthenticatedMapRoute
@@ -104,6 +110,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/calendar'
     | '/competitors'
     | '/map'
@@ -112,7 +119,6 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/signals'
-    | '/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/calendar'
@@ -126,6 +132,7 @@ export interface FileRouteTypes {
     | '/'
   id:
     | '__root__'
+    | '/_authenticated'
     | '/_authenticated/calendar'
     | '/_authenticated/competitors'
     | '/_authenticated/map'
@@ -138,6 +145,85 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/signals': {
+      id: '/_authenticated/signals'
+      path: '/signals'
+      fullPath: '/signals'
+      preLoaderRoute: typeof AuthenticatedSignalsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/reports': {
+      id: '/_authenticated/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AuthenticatedReportsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects': {
+      id: '/_authenticated/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof AuthenticatedProjectsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/opportunities': {
+      id: '/_authenticated/opportunities'
+      path: '/opportunities'
+      fullPath: '/opportunities'
+      preLoaderRoute: typeof AuthenticatedOpportunitiesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/map': {
+      id: '/_authenticated/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof AuthenticatedMapRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/competitors': {
+      id: '/_authenticated/competitors'
+      path: '/competitors'
+      fullPath: '/competitors'
+      preLoaderRoute: typeof AuthenticatedCompetitorsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/calendar': {
+      id: '/_authenticated/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof AuthenticatedCalendarRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+  }
+}
+
+interface AuthenticatedRouteRouteChildren {
   AuthenticatedCalendarRoute: typeof AuthenticatedCalendarRoute
   AuthenticatedCompetitorsRoute: typeof AuthenticatedCompetitorsRoute
   AuthenticatedMapRoute: typeof AuthenticatedMapRoute
@@ -149,75 +235,7 @@ export interface RootRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
 }
 
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/_authenticated/': {
-      id: '/_authenticated/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/signals': {
-      id: '/_authenticated/signals'
-      path: '/signals'
-      fullPath: '/signals'
-      preLoaderRoute: typeof AuthenticatedSignalsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/settings': {
-      id: '/_authenticated/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/reports': {
-      id: '/_authenticated/reports'
-      path: '/reports'
-      fullPath: '/reports'
-      preLoaderRoute: typeof AuthenticatedReportsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/projects': {
-      id: '/_authenticated/projects'
-      path: '/projects'
-      fullPath: '/projects'
-      preLoaderRoute: typeof AuthenticatedProjectsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/opportunities': {
-      id: '/_authenticated/opportunities'
-      path: '/opportunities'
-      fullPath: '/opportunities'
-      preLoaderRoute: typeof AuthenticatedOpportunitiesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/map': {
-      id: '/_authenticated/map'
-      path: '/map'
-      fullPath: '/map'
-      preLoaderRoute: typeof AuthenticatedMapRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/competitors': {
-      id: '/_authenticated/competitors'
-      path: '/competitors'
-      fullPath: '/competitors'
-      preLoaderRoute: typeof AuthenticatedCompetitorsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/calendar': {
-      id: '/_authenticated/calendar'
-      path: '/calendar'
-      fullPath: '/calendar'
-      preLoaderRoute: typeof AuthenticatedCalendarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-  }
-}
-
-const rootRouteChildren: RootRouteChildren = {
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCalendarRoute: AuthenticatedCalendarRoute,
   AuthenticatedCompetitorsRoute: AuthenticatedCompetitorsRoute,
   AuthenticatedMapRoute: AuthenticatedMapRoute,
@@ -227,6 +245,13 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedSignalsRoute: AuthenticatedSignalsRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
