@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import logoAsset from "@/assets/oktapod-logo-transparent.png.asset.json";
+import logoUrl from "@/assets/oktapod-logo-transparent.png";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
@@ -67,7 +67,7 @@ function AuthPage() {
 
       <div className="relative w-full max-w-[420px]">
         <div className="mb-6 flex flex-col items-center text-center">
-          <img src={logoAsset.url} alt="OCTAPOD" className="h-16 w-auto object-contain" />
+          <img src={logoUrl} alt="OCTAPOD" className="h-16 w-auto object-contain" />
           <div className="text-eyebrow mt-3">Tender &amp; market intelligence</div>
           <h1 className="mt-2 font-display text-2xl font-medium tracking-tight text-foreground">
             Sign in to OCTAPOD
