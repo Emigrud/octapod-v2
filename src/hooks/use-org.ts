@@ -1,7 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { db, type OrgRole } from "@/integrations/octapod-db";
 
-export type OrgRole = "owner" | "admin" | "member";
+export type { OrgRole };
 
 export interface CurrentOrg {
   id: string;
@@ -17,7 +18,11 @@ export interface OrgMember {
   created_at: string;
 }
 
-/** The organization the signed-in user belongs to (first by creation order). */
+export function isAdminOrAbove(role: OrgRole | undefined): boolean {
+  return role === "owner" || role === "admin";
+}
+
+/** The organization the signed-in user belongs to (first by join order). */
 export function useCurrentOrg() {
   return useQuery({
     queryKey: ["current-org"],
@@ -25,23 +30,32 @@ export function useCurrentOrg() {
       const { data: auth } = await supabase.auth.getUser();
       if (!auth.user) return null;
 
-      const { data, error } = await supabase
+      const { data: membership, error: membershipError } = await db
         .from("org_members")
-        .select("role, org_id, organizations!inner(id, name, created_at)")
+        .select("org_id, role, created_at")
         .eq("user_id", auth.user.id)
         .order("created_at", { ascending: true })
         .limit(1)
         .maybeSingle();
 
-      if (error) throw error;
-      if (!data) return null;
+      if (membershipError) throw membershipError;
+      if (!membership) return null;
 
-      const org = data.organizations as unknown as {
-        id: string;
-        name: string;
-        created_at: string;
+      const { data: org, error: orgError } = await db
+        .from("organizations")
+        .select("id, name, created_at")
+        .eq("id", membership.org_id)
+        .maybeSingle();
+
+      if (orgError) throw orgError;
+      if (!org) return null;
+
+      return {
+        id: org.id,
+        name: org.name,
+        created_at: org.created_at,
+        role: membership.role,
       };
-      return { id: org.id, name: org.name, created_at: org.created_at, role: data.role as OrgRole };
     },
   });
 }
@@ -51,13 +65,13 @@ export function useOrgMembers(orgId: string | undefined) {
     queryKey: ["org-members", orgId],
     enabled: Boolean(orgId),
     queryFn: async (): Promise<OrgMember[]> => {
-      const { data, error } = await supabase
+      const { data, error } = await db
         .from("org_members")
         .select("user_id, user_email, role, created_at")
-        .eq("org_id", orgId!)
+        .eq("org_id", orgId as string)
         .order("created_at", { ascending: true });
       if (error) throw error;
-      return (data ?? []) as OrgMember[];
+      return data ?? [];
     },
   });
 }
@@ -66,14 +80,11 @@ export function useRenameOrg() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ orgId, name }: { orgId: string; name: string }) => {
-      const { error } = await supabase
-        .from("organizations")
-        .update({ name })
-        .eq("id", orgId);
+      const { error } = await db.from("organizations").update({ name }).eq("id", orgId);
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["current-org"] });
+      void queryClient.invalidateQueries({ queryKey: ["current-org"] });
     },
   });
 }
