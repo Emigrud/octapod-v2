@@ -3,7 +3,7 @@ import { Map as MapIcon } from "lucide-react";
 import { CountryChip, Tag } from "@/components/octapod";
 import { PageHeader } from "@/components/shell/PageHeader";
 
-export const Route = createFileRoute("/map")({
+export const Route = createFileRoute("/_authenticated/map")({
   head: () => ({
     meta: [
       { title: "Map — OCTAPOD" },

@@ -3,7 +3,7 @@ import { Users } from "lucide-react";
 import { EmptyState } from "@/components/octapod";
 import { PageHeader } from "@/components/shell/PageHeader";
 
-export const Route = createFileRoute("/competitors")({
+export const Route = createFileRoute("/_authenticated/competitors")({
   head: () => ({
     meta: [
       { title: "Competitors — oktapod" },

@@ -3,7 +3,7 @@ import { BarChart3 } from "lucide-react";
 import { EmptyState } from "@/components/octapod";
 import { PageHeader } from "@/components/shell/PageHeader";
 
-export const Route = createFileRoute("/reports")({
+export const Route = createFileRoute("/_authenticated/reports")({
   head: () => ({
     meta: [
       { title: "Reports — oktapod" },

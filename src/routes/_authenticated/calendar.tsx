@@ -3,7 +3,7 @@ import { CalendarDays } from "lucide-react";
 import { EmptyState } from "@/components/octapod";
 import { PageHeader } from "@/components/shell/PageHeader";
 
-export const Route = createFileRoute("/calendar")({
+export const Route = createFileRoute("/_authenticated/calendar")({
   head: () => ({
     meta: [
       { title: "Calendar — oktapod" },

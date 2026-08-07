@@ -5,8 +5,15 @@ import { PageHeader } from "@/components/shell/PageHeader";
 import { getDataSourceStatus, type DataSourceMode } from "@/lib/data-source.functions";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useCurrentOrg, useOrgMembers, useRenameOrg, isAdminOrAbove } from "@/hooks/use-org";
 
-export const Route = createFileRoute("/settings")({
+
+export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
     meta: [
       { title: "Settings — OCTAPOD" },
@@ -42,6 +49,9 @@ function SettingsPage() {
 
       <DataSourceStatusPanel status={dataSourceStatus} />
 
+      <OrganizationCard />
+
+
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <PrefCard
           icon={<Building2 className="h-4 w-4 text-tender" />}
@@ -70,7 +80,132 @@ function SettingsPage() {
   );
 }
 
+function OrganizationCard() {
+  const { data: org, isLoading, isError, error } = useCurrentOrg();
+  const { data: members = [], isLoading: membersLoading } = useOrgMembers(org?.id);
+  const rename = useRenameOrg();
+  const [name, setName] = useState("");
+  const [touched, setTouched] = useState(false);
+
+  const canEdit = isAdminOrAbove(org?.role);
+  const value = touched ? name : (org?.name ?? "");
+  const trimmed = value.trim();
+  const dirty = Boolean(org) && trimmed.length > 0 && trimmed !== org?.name;
+
+  async function handleSave(event: React.FormEvent) {
+    event.preventDefault();
+    if (!org || !dirty) return;
+    if (trimmed.length < 2 || trimmed.length > 120) {
+      toast.error("Organization name must be 2–120 characters.");
+      return;
+    }
+    try {
+      await rename.mutateAsync({ orgId: org.id, name: trimmed });
+      setTouched(false);
+      toast.success("Organization name updated.");
+    } catch (mutationError) {
+      toast.error(
+        mutationError instanceof Error ? mutationError.message : "Could not update the name.",
+      );
+    }
+  }
+
+  return (
+    <Card className="border-hairline bg-surface-1/50 shadow-none">
+      <CardHeader className="pb-4">
+        <div className="flex items-center gap-2">
+          <span className="flex h-7 w-7 items-center justify-center rounded-sm border border-hairline bg-surface-2/60">
+            <Building2 className="h-4 w-4 text-primary" />
+          </span>
+          <div>
+            <CardTitle className="text-[15px] font-medium">Organization</CardTitle>
+            <CardDescription className="text-[12.5px]">
+              Name and members of the organization you belong to
+            </CardDescription>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-5 pt-0">
+        {isLoading && <p className="text-[12.5px] text-muted-foreground">Loading organization…</p>}
+
+        {isError && (
+          <p className="text-[12.5px] text-danger">
+            {error instanceof Error ? error.message : "Could not load your organization."}
+          </p>
+        )}
+
+        {!isLoading && !isError && !org && (
+          <p className="text-[12.5px] text-muted-foreground">
+            Your account is not a member of any organization yet.
+          </p>
+        )}
+
+        {org && (
+          <>
+            <form onSubmit={handleSave} className="space-y-2">
+              <Label htmlFor="org-name">Organization name</Label>
+              <div className="flex flex-wrap items-center gap-2">
+                <Input
+                  id="org-name"
+                  value={value}
+                  maxLength={120}
+                  disabled={!canEdit || rename.isPending}
+                  onChange={(e) => {
+                    setTouched(true);
+                    setName(e.target.value);
+                  }}
+                  className="max-w-sm"
+                />
+                {canEdit && (
+                  <Button type="submit" disabled={!dirty || rename.isPending}>
+                    Save
+                  </Button>
+                )}
+              </div>
+              <p className="text-[11px] text-subtle-foreground">
+                {canEdit
+                  ? "Admins and owners can rename the organization."
+                  : "Only admins and owners can rename the organization."}
+              </p>
+            </form>
+
+            <div>
+              <div className="text-[10.5px] uppercase tracking-wider text-subtle-foreground">
+                Members
+              </div>
+              <div className="mt-2 divide-y divide-hairline rounded-md border border-hairline bg-surface-2/40">
+                {membersLoading && (
+                  <div className="px-3 py-2.5 text-[12.5px] text-muted-foreground">Loading…</div>
+                )}
+                {!membersLoading && members.length === 0 && (
+                  <div className="px-3 py-2.5 text-[12.5px] text-muted-foreground">
+                    No members found.
+                  </div>
+                )}
+                {members.map((member) => (
+                  <div
+                    key={member.user_id}
+                    className="flex items-center justify-between gap-3 px-3 py-2.5"
+                  >
+                    <span className="truncate font-mono text-[12.5px] text-foreground">
+                      {member.user_email ?? member.user_id}
+                    </span>
+                    <Badge variant="secondary" className="text-[10.5px] capitalize">
+                      {member.role}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 function DataSourceStatusPanel({
+
   status,
 }: {
   status: {

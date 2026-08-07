@@ -3,7 +3,7 @@ import { Radio } from "lucide-react";
 import { EmptyState, StatCard } from "@/components/octapod";
 import { PageHeader } from "@/components/shell/PageHeader";
 
-export const Route = createFileRoute("/signals")({
+export const Route = createFileRoute("/_authenticated/signals")({
   head: () => ({
     meta: [
       { title: "Signals — OCTAPOD" },
