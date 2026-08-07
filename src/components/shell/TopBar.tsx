@@ -1,6 +1,27 @@
-import { Bell, Building2, ChevronDown, Search } from "lucide-react";
+import { Bell, Building2, ChevronDown, LogOut, Search } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import { supabase } from "@/integrations/supabase/client";
+import { useCurrentOrg } from "@/hooks/use-org";
 
 export function TopBar() {
+  const { data: org, isLoading, isError } = useCurrentOrg();
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  async function handleSignOut() {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    void navigate({ to: "/auth", replace: true });
+  }
+
+  const orgLabel = isLoading
+    ? "Loading…"
+    : isError
+      ? "Unavailable"
+      : (org?.name ?? "No organization");
+
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center gap-4 hairline-b bg-background/90 px-6 backdrop-blur-md">
       <div className="relative w-full max-w-xl">
@@ -16,14 +37,10 @@ export function TopBar() {
       </div>
 
       <div className="ml-auto flex items-center gap-3">
-        <button
-          type="button"
-          className="inline-flex items-center gap-2 rounded-md border border-hairline bg-surface-1 px-3 py-1.5 text-[12.5px] text-foreground hover:border-primary/40"
-        >
+        <div className="inline-flex items-center gap-2 rounded-md border border-hairline bg-surface-1 px-3 py-1.5 text-[12.5px] text-foreground">
           <Building2 className="h-3.5 w-3.5 text-subtle-foreground" />
-          <span>Demo Only</span>
-          <ChevronDown className="h-3.5 w-3.5 text-subtle-foreground" />
-        </button>
+          <span className={isError ? "text-danger" : undefined}>{orgLabel}</span>
+        </div>
 
         <button
           type="button"
@@ -48,6 +65,15 @@ export function TopBar() {
             <span className="block text-[10.5px] text-subtle-foreground">Analyst</span>
           </span>
           <ChevronDown className="h-3.5 w-3.5 text-subtle-foreground" />
+        </button>
+
+        <button
+          type="button"
+          onClick={handleSignOut}
+          aria-label="Sign out"
+          className="flex h-9 w-9 items-center justify-center rounded-md border border-hairline bg-surface-1 text-muted-foreground hover:border-primary/40 hover:text-foreground"
+        >
+          <LogOut className="h-4 w-4" />
         </button>
       </div>
     </header>
