@@ -107,27 +107,27 @@
 /* ---------- Light (default) — bright control room ---------- */
 :root,
 .light {
-  --background: oklch(0.9724 0.0053 197.90);
-  --foreground: oklch(0.3005 0.0407 216.21);
+  --background: oklch(0.985 0.003 240);
+  --foreground: oklch(0.20 0.02 250);
 
   --surface-1: oklch(1 0 0);
-  --surface-2: oklch(0.9544 0.0096 197.45);
-  --surface-3: oklch(0.9431 0.0128 197.28);
+  --surface-2: oklch(0.968 0.006 240);
+  --surface-3: oklch(0.945 0.008 240);
 
-  --muted: oklch(0.9544 0.0096 197.45);
-  --muted-foreground: oklch(0.5369 0.0365 208.52);
-  --subtle-foreground: oklch(0.6504 0.0310 207.52);
+  --muted: oklch(0.968 0.006 240);
+  --muted-foreground: oklch(0.48 0.02 250);
+  --subtle-foreground: oklch(0.62 0.02 250);
 
-  --border: oklch(0.9167 0.0160 197.14);
-  --hairline: oklch(0.9167 0.0160 197.14 / 90%);
+  --border: oklch(0.90 0.010 240);
+  --hairline: oklch(0.90 0.010 240 / 90%);
   --input: oklch(0.92 0.010 240);
-  --ring: oklch(0.5362 0.0888 205.06);
+  --ring: oklch(0.55 0.20 258);
 
-  /* Sea teal — the single actionable accent (tenders). */
-  --accent-primary: oklch(0.5362 0.0888 205.06);
+  /* Cornflower blue — the single actionable accent (tenders). */
+  --accent-primary: oklch(0.55 0.20 258);
   --accent-primary-foreground: oklch(1 0 0);
-  --accent-primary-muted: oklch(0.5362 0.0888 205.06 / 10%);
-  --accent-primary-ring: oklch(0.5362 0.0888 205.06 / 30%);
+  --accent-primary-muted: oklch(0.55 0.20 258 / 10%);
+  --accent-primary-ring: oklch(0.55 0.20 258 / 30%);
 
   /* Amber — reserved for "New" / impact pills only. */
   --accent-signal: oklch(0.68 0.15 65);
@@ -155,19 +155,19 @@
     0 8px 24px -18px oklch(0.25 0.05 250 / 22%);
 
   --isoline-bg:
-    radial-gradient(ellipse 1200px 700px at 20% 15%, oklch(0.5362 0.0888 205.06 / 4%), transparent 60%),
-    radial-gradient(ellipse 900px 500px at 85% 80%, oklch(0.5362 0.0888 205.06 / 3%), transparent 60%),
+    radial-gradient(ellipse 1200px 700px at 20% 15%, oklch(0.55 0.20 258 / 4%), transparent 60%),
+    radial-gradient(ellipse 900px 500px at 85% 80%, oklch(0.55 0.20 258 / 3%), transparent 60%),
     repeating-radial-gradient(
       circle at 30% 40%,
       transparent 0px,
       transparent 46px,
-      oklch(0.5362 0.0888 205.06 / 4%) 46px,
-      oklch(0.5362 0.0888 205.06 / 4%) 47px
+      oklch(0.55 0.20 258 / 4%) 46px,
+      oklch(0.55 0.20 258 / 4%) 47px
     );
 
   --grid-bg:
-    linear-gradient(oklch(0.5362 0.0888 205.06 / 5%) 1px, transparent 1px),
-    linear-gradient(90deg, oklch(0.5362 0.0888 205.06 / 5%) 1px, transparent 1px);
+    linear-gradient(oklch(0.55 0.20 258 / 5%) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(0.55 0.20 258 / 5%) 1px, transparent 1px);
   --grid-bg-size: 44px 44px;
 }
 
