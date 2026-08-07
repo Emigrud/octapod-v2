@@ -6,7 +6,7 @@ import { getDataSourceStatus, type DataSourceMode } from "@/lib/data-source.func
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-export const Route = createFileRoute("/settings")({
+export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
     meta: [
       { title: "Settings — OCTAPOD" },

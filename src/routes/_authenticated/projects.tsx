@@ -3,7 +3,7 @@ import { FolderKanban } from "lucide-react";
 import { EmptyState } from "@/components/octapod";
 import { PageHeader } from "@/components/shell/PageHeader";
 
-export const Route = createFileRoute("/projects")({
+export const Route = createFileRoute("/_authenticated/projects")({
   head: () => ({
     meta: [
       { title: "Projects — oktapod" },

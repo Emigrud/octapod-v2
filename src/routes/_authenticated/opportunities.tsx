@@ -3,7 +3,7 @@ import { FileText } from "lucide-react";
 import { DataTable, FilterBar, type DataTableColumn } from "@/components/octapod";
 import { PageHeader } from "@/components/shell/PageHeader";
 
-export const Route = createFileRoute("/opportunities")({
+export const Route = createFileRoute("/_authenticated/opportunities")({
   head: () => ({
     meta: [
       { title: "Opportunities — OCTAPOD" },
