@@ -4,6 +4,7 @@ import { z } from "zod";
 import { Loader2, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { AUTH_ENABLED } from "@/lib/auth-flags";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,6 +31,7 @@ export const Route = createFileRoute("/auth")({
     ],
   }),
   beforeLoad: async () => {
+    if (!AUTH_ENABLED) throw redirect({ to: "/" });
     const { data } = await supabase.auth.getUser();
     if (data.user) throw redirect({ to: "/" });
   },

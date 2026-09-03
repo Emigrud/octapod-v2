@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { db, type OrgRole } from "@/integrations/octapod-db";
+import { AUTH_ENABLED } from "@/lib/auth-flags";
 
 export type { OrgRole };
 
@@ -26,6 +27,7 @@ export function isAdminOrAbove(role: OrgRole | undefined): boolean {
 export function useCurrentOrg() {
   return useQuery({
     queryKey: ["current-org"],
+    enabled: AUTH_ENABLED,
     queryFn: async (): Promise<CurrentOrg | null> => {
       const { data: auth } = await supabase.auth.getUser();
       if (!auth.user) return null;

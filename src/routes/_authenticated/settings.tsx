@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useCurrentOrg, useOrgMembers, useRenameOrg, isAdminOrAbove } from "@/hooks/use-org";
+import { AUTH_ENABLED } from "@/lib/auth-flags";
 
 
 export const Route = createFileRoute("/_authenticated/settings")({
@@ -86,6 +87,33 @@ function OrganizationCard() {
   const rename = useRenameOrg();
   const [name, setName] = useState("");
   const [touched, setTouched] = useState(false);
+
+  if (!AUTH_ENABLED) {
+    return (
+      <Card className="border-hairline bg-surface-1/50 shadow-none">
+        <CardHeader className="pb-4">
+          <div className="flex items-center gap-2">
+            <span className="flex h-7 w-7 items-center justify-center rounded-sm border border-hairline bg-surface-2/60">
+              <Building2 className="h-4 w-4 text-primary" />
+            </span>
+            <div>
+              <CardTitle className="text-[15px] font-medium">Organization</CardTitle>
+              <CardDescription className="text-[12.5px]">
+                Name and members of the organization you belong to
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <p className="text-[12.5px] text-muted-foreground">
+            Sign-in is temporarily disabled for the pilot preview. Organization management will
+            appear here when authentication is re-enabled.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
 
   const canEdit = isAdminOrAbove(org?.role);
   const value = touched ? name : (org?.name ?? "");
