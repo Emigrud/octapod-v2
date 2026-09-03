@@ -11,5 +11,10 @@ export default defineConfig({
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    router: {
+      // Eagerly import route components: the app is small, and lazy route
+      // chunks cause a server/client Suspense mismatch during hydration.
+      autoCodeSplitting: false,
+    },
   },
 });

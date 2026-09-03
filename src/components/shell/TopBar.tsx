@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useCurrentOrg } from "@/hooks/use-org";
+import { AUTH_ENABLED } from "@/lib/auth-flags";
 
 export function TopBar() {
   const { data: org, isLoading, isError } = useCurrentOrg();
@@ -16,11 +17,13 @@ export function TopBar() {
     void navigate({ to: "/auth", replace: true });
   }
 
-  const orgLabel = isLoading
-    ? "Loading…"
-    : isError
-      ? "Unavailable"
-      : (org?.name ?? "No organization");
+  const orgLabel = !AUTH_ENABLED
+    ? "OCTAPOD — pilot preview"
+    : isLoading
+      ? "Loading…"
+      : isError
+        ? "Unavailable"
+        : (org?.name ?? "No organization");
 
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center gap-4 hairline-b bg-background/90 px-6 backdrop-blur-md">
@@ -67,14 +70,16 @@ export function TopBar() {
           <ChevronDown className="h-3.5 w-3.5 text-subtle-foreground" />
         </button>
 
-        <button
-          type="button"
-          onClick={handleSignOut}
-          aria-label="Sign out"
-          className="flex h-9 w-9 items-center justify-center rounded-md border border-hairline bg-surface-1 text-muted-foreground hover:border-primary/40 hover:text-foreground"
-        >
-          <LogOut className="h-4 w-4" />
-        </button>
+        {AUTH_ENABLED && (
+          <button
+            type="button"
+            onClick={handleSignOut}
+            aria-label="Sign out"
+            className="flex h-9 w-9 items-center justify-center rounded-md border border-hairline bg-surface-1 text-muted-foreground hover:border-primary/40 hover:text-foreground"
+          >
+            <LogOut className="h-4 w-4" />
+          </button>
+        )}
       </div>
     </header>
   );
