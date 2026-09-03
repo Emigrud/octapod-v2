@@ -14,7 +14,7 @@ export default defineConfig({
     router: {
       // Eagerly import route components: the app is small, and lazy route
       // chunks cause a server/client Suspense mismatch during hydration.
-      autoCodeSplitting: false,
+      codeSplittingOptions: { defaultBehavior: [] },
     },
   },
 });
