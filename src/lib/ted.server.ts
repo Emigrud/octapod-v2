@@ -20,9 +20,16 @@ import { createHash } from "crypto";
 const TED_SEARCH_URL = "https://api.ted.europa.eu/v3/notices/search";
 const TED_SOURCE_NAME = "TED";
 
-/** Pilot scope: Finland (ISO alpha-3 as TED expects), CPV divisions 45/71/09/65. */
+/**
+ * Pilot scope: Finland (ISO alpha-3 as TED expects), CPV divisions
+ * 45 construction, 71 engineering, 09 energy, 44 materials/pipelines,
+ * 51 installation, 65 utilities.
+ *
+ * Divisions 31, 42, 48 and 72 were measured against the same window and
+ * deliberately excluded — see docs/pilot-source-register.md Part B.
+ */
 export const TED_COUNTRY = "FIN";
-export const TED_CPV_DIVISIONS = ["45", "71", "09", "65"] as const;
+export const TED_CPV_DIVISIONS = ["45", "71", "09", "44", "51", "65"] as const;
 
 const TED_FIELDS = [
   "publication-number",
