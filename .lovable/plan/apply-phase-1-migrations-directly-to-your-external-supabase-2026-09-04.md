@@ -1,17 +1,13 @@
 # Apply Phase 1 migrations directly to your external Supabase project
 
-Decision recorded: **stay on the external project `tsaeuuldzjdmqjeltyhw`** — no Lovable Cloud.
-
-## Why a connection string is needed
-
-Lovable only holds two API keys for your project (publishable + service-role). Those talk to the REST API, which can read/write rows in *existing* tables. Creating tables, enums, indexes, RLS policies and cron jobs is DDL, which only runs over a real Postgres connection — that needs the database host **and password**, neither of which Lovable ever received for your external project. It cannot be derived from the project ref or service-role key.
+Decision recorded: **stay on the external project `tsaeuuldzjdmqjeltyhw`** — no Lovable Cloud. (Approved 2026-09-04; re-shown to resume at the secret step.)
 
 ## Step 1 — you store the Postgres connection string once (secure form)
 
 Supabase dashboard → Project Settings → Database → Connection string → URI, e.g.
 `postgresql://postgres.tsaeuuldzjdmqjeltyhw:<password>@aws-0-<region>.pooler.supabase.com:5432/postgres`.
 
-Paste the **whole string, password included**, into the `OCTAPOD_DB_URL` secure secret form. It goes straight to the encrypted store; it is never shown in chat or to me. Do **not** paste the password into the chat box.
+Paste the **whole string, password included**, into the `OCTAPOD_DB_URL` secure form. Best practice: copy the URI string Supabase shows you verbatim — it already has any special characters in the password correctly percent-encoded. Don't paste the password into chat.
 
 ## Step 2 — I apply the migrations (idempotent)
 
@@ -31,7 +27,7 @@ Paste the **whole string, password included**, into the `OCTAPOD_DB_URL` secure 
 
 Write `docs/state-reports/phase-1.md` in the Phase 0B structure and update `roadmap.md`.
 
-## Deviations to confirm (carried from before)
+## Deviations to confirm (carried)
 
 1. Ingestion runs as a TanStack server route, not a Supabase Edge Function — this project has no edge-function deployment path from Lovable. Same schedule, same service-role key, endpoint token-protected.
 2. The stored raw payload is the TED Search API JSON record (carries the notice XML link), not the fetched eForms XML document. Full eForms fetch/parse can follow before enrichment if you want it.
