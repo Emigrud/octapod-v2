@@ -4,12 +4,12 @@ Builds phase by phase (0→6). Nothing from the "Not in the pilot" list without 
 
 ## Status
 - [x] **Phase 0 / 0B — Auth & tenancy.** Complete and verified (see `docs/state-reports/phase-0b.md`). Auth gate currently disabled (`AUTH_ENABLED=false`) for pilot browsing; flip flag to re-enable. Service-role key stored as `OCTAPOD_SERVICE_ROLE_KEY`.
-- [~] **Phase 1 — TED ingestion for Finland.** Code complete, blocked on the user running two migrations.
-  - [x] Migration `db/migrations/0002_phase1_ted_ingestion.sql` (sources, raw_documents, opportunities, ingest_runs + RLS).
-  - [x] Migration `db/migrations/0003_phase1_ted_schedule.sql` (pg_cron daily trigger).
+- [x] **Phase 1 — TED ingestion for Finland.** Complete and verified (see `docs/state-reports/phase-1.md`).
+  - [x] Migration `db/migrations/0002_phase1_ted_ingestion.sql` — applied to external project (sources, raw_documents, opportunities, ingest_runs + RLS).
+  - [x] Migration `db/migrations/0003_phase1_ted_schedule.sql` — applied (pg_cron daily trigger, app_settings wired with preview URL + token).
   - [x] Ingestion (`src/lib/ted.server.ts`), cron endpoint `/api/public/ingest/ted`, admin screen `/ingestion`, real Opportunities screen.
-  - [ ] **User action:** run 0002 (and 0003 after setting app URL + token) in the Supabase SQL Editor.
-  - [ ] After migration: backfill, acceptance tests (double-run duplicates, amendment versioning, >1000 rows, 5 TED links), Phase 1 state report.
+  - [x] Backfill + acceptance: 1,427 real TED opportunities; idempotency double-run (0 new); amendment versioning (reverted test); 3 ingest_runs; 5 TED links resolve (HTTP 202).
+  - Open: verify deployed `INGEST_TRIGGER_TOKEN` + set `ingest_base_url` to the published URL once published; investigate pre-existing `Sidebar` useContext runtime alert.
 - [ ] Phase 2 — AI enrichment (Claude extraction, strict JSON schema, source-text-only).
 - [ ] Phase 3 — Map (Mapbox) + opportunity detail.
 - [ ] Phase 4 — Early signals (Fingrid + news) + signal linking.
