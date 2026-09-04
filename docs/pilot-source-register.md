@@ -38,7 +38,8 @@ The pilot was scoped partly to keep this list short. Nothing here has a long wai
 | Authentication | **None.** The Search API is open to data reusers. API keys exist only for *submitting* notices, which we never do |
 | Bulk alternative | Daily and monthly notice packages, plus datasets on data.europa.eu and a SPARQL endpoint. Use bulk for the initial backfill, the Search API for daily updates |
 | Format | eForms XML. Older notices use the legacy schema — the parser must tolerate both |
-| Our filter | NUTS codes for Finland, combined with CPV divisions 45 (construction), 71 (engineering), 09 (energy and fuels), 65 (utilities) |
+| Our filter | `(buyer-country IN (FIN)) OR (place-of-performance-country-lot IN (FIN))`, combined with CPV divisions **45** (construction), **71** (engineering), **09** (energy and fuels), **44** (construction materials, pipes, water infrastructure), **51** (installation and mechanical works), **65** (utilities), matched as wildcards `45* 71* 09* 44* 51* 65*`, plus a publication-date window. Country is a data column; the Finland value lives in this source's query definition |
+| Divisions measured and excluded | Measured read-only over 2026-04-07 → 2026-09-04 (new notices / above €1M): **31** electrical equipment 85/9 — lighting, UPS, general equipment; **42** machinery 129/7 — cleaning, access control, industrial machinery; **48** software 496/78 and **72** IT services 791/131 — overwhelmingly municipal IT. All four add volume without adding contractor-relevant work, so they stay out. **51** is retained provisionally and will be re-measured after Phase 2 enrichment; it is dropped if the relevant proportion is low |
 | Known limits | Above-threshold only. Everyone receives it simultaneously — no timing advantage. This is why Hilma matters |
 | Status | Verified |
 
