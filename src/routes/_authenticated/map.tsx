@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Map as MapIcon } from "lucide-react";
 import { CountryChip, Tag } from "@/components/octapod";
 import { PageHeader } from "@/components/shell/PageHeader";
+import { IllustrativeDataNotice } from "@/components/octapod";
 
 export const Route = createFileRoute("/_authenticated/map")({
   head: () => ({
@@ -30,6 +31,8 @@ function MapPage() {
         title="The chart is empty."
         description="Once opportunities and signals are flowing, this canvas becomes a live map — layered by sector, source and time — with the horizontal signal timeline anchored beneath."
       />
+
+      <IllustrativeDataNotice what="map data" />
 
       <div className="relative overflow-hidden rounded-md border border-hairline bg-surface-1/50">
         <div className="absolute inset-0 bg-isoline" />

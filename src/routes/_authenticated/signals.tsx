@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Radio } from "lucide-react";
 import { EmptyState, StatCard } from "@/components/octapod";
 import { PageHeader } from "@/components/shell/PageHeader";
+import { IllustrativeDataNotice } from "@/components/octapod";
 
 export const Route = createFileRoute("/_authenticated/signals")({
   head: () => ({
@@ -31,6 +32,8 @@ function SignalsPage() {
         title="No signals yet."
         description="Grid plans, press and corporate announcements will stream in here — the 6-to-24-month lead before a matching tender is published. When a signal later becomes a tender, we mark the date we first saw it."
       />
+
+      <IllustrativeDataNotice what="early-signal ingestion" />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <StatCard variant="signal" label="Fingrid updates" state="empty" hint="Grid plans & news" />

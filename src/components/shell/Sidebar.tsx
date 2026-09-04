@@ -11,6 +11,7 @@ import {
   User,
   Building2,
   BellRing,
+  Database,
   Sparkles,
   type LucideIcon,
 } from "lucide-react";
@@ -26,8 +27,8 @@ interface NavItem {
 
 const PRIMARY_NAV: NavItem[] = [
   { to: "/", label: "Overview", icon: LayoutDashboard },
-  { to: "/signals", label: "Early Signals", icon: Radio, badge: 24 },
-  { to: "/opportunities", label: "Tenders", icon: FileText, badge: 128 },
+  { to: "/signals", label: "Early Signals", icon: Radio },
+  { to: "/opportunities", label: "Tenders", icon: FileText },
   { to: "/projects", label: "Projects", icon: FolderKanban },
   { to: "/map", label: "Map", icon: Map },
   { to: "/calendar", label: "Calendar", icon: CalendarDays },
@@ -39,6 +40,7 @@ const SETTINGS_NAV: NavItem[] = [
   { to: "/settings", label: "My Profile", icon: User },
   { to: "/settings/company", label: "Company Profile", icon: Building2 },
   { to: "/settings/alerts", label: "Alerts & Subscriptions", icon: BellRing },
+  { to: "/ingestion", label: "Ingestion", icon: Database },
 ];
 
 
