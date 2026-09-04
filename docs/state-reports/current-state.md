@@ -19,9 +19,14 @@
 
 ## 2. Phase 1 — TED ingestion for Finland (complete, verified)
 
-**Source:** TED Search API v3, `POST https://api.ted.europa.eu/v3/notices/search`, unauthenticated (per the Source & Access Register). Query scope: country `FIN`, CPV wildcards `45*`, `71*`, `09*`, `65*`; `onlyLatestVersions:false`, `paginationMode: ITERATION`, page size 250. All country scoping is data, not schema.
+**Source:** TED Search API v3, `POST https://api.ted.europa.eu/v3/notices/search`, unauthenticated (per the Source & Access Register). `onlyLatestVersions:false`, `paginationMode: ITERATION`, page size 250. All country scoping is data, not schema.
 
-**Migrations applied:** `0002_phase1_ted_ingestion.sql`, `0003_phase1_ted_schedule.sql` (idempotent).
+**Filter actually in force** (`src/lib/ted.server.ts`):
+`(classification-cpv IN (45* 71* 09* 44* 51* 65*)) AND ((buyer-country IN (FIN)) OR (place-of-performance-country-lot IN (FIN))) AND (publication-date window)`.
+
+Divisions 44 (pipes / construction materials) and 51 (installation services) were added after a read-only coverage probe. 31, 42, 48 and 72 were measured and **excluded** as noise (lighting, UPS, cleaning machinery, municipal IT). Division 51 is provisional — re-measure its relevant proportion after Phase 2 enrichment and drop it if low.
+
+**Migrations applied:** `0002_phase1_ted_ingestion.sql`, `0003_phase1_ted_schedule.sql`, `0004_phase1_supply_flag.sql` (all idempotent).
 
 **Tables:** `sources`, `raw_documents`, `opportunities`, `ingest_runs`, `app_settings` (service-role only). Enums `source_kind (tender|signal)`, `opportunity_kind (tender|project)`.
 
@@ -29,20 +34,26 @@
 
 **Ingestion rules (all five implemented and exercised):** original payload stored immutably; identity `(source_id, native_id)`; SHA-256 content hash → new raw row + new opportunity version, previous row superseded (never overwritten); cursor with 7-day overlap; one `ingest_runs` row per run.
 
+**Supply vs works/services:** `opportunities.is_supply boolean` (nullable), derived at ingestion from CPV divisions + notice type — design contests and any of 45/51/71/65 → works/services; otherwise a primary division of 09/31/42/44 → supply; no judgeable CPV → null. Surfaced as a Type column on the Opportunities screen.
+
+**Sector labels:** `CPV_SECTORS` covers every ingested division — 44 → "pipelines and water infrastructure", 51 → "installation and mechanical works". Existing rows were re-derived from their stored raw payloads (no refetch, nothing invented). Counts: construction 835, engineering 525, pipelines/water 167, installation/mechanical 116, energy 105, utilities 33.
+
 **Schedule:** `pg_cron` + `pg_net` installed. Job `octapod-ted-daily`, `15 4 * * *`, active — calls `trigger_ted_ingest()` which POSTs to `/api/public/ingest/ted` with `x-ingest-token` using `app_settings.ingest_base_url` / `ingest_token`.
 
 **Live data in the database right now (all real TED notices, verified today):**
 
 | Metric | Value |
 |---|---|
-| Current opportunities (`superseded_by is null`) | **1,427** |
-| Raw documents | 1,427 |
-| `published_at` populated | 1,427 / 1,427 (2026-04-06 → 2026-09-03) |
-| `deadline_at` populated | 809 |
-| Status open / closed | 734 / 693 |
-| Ingest runs recorded | 3 |
+| Current opportunities (`superseded_by is null`) | **1,632** |
+| Raw documents | 1,632 |
+| `published_at` populated | 1,632 / 1,632 |
+| `deadline_at` populated | 913 |
+| Status open / closed | 866 / 766 |
+| Supply / works-services / undetermined | 218 / 1,403 / 11 |
+| Ingest runs recorded | 4 |
 
-**Acceptance results:** backfill 2026-04-07→2026-09-04 fetched 1,427 (1,151 new, 276 unchanged, 0 failed); idempotent rerun added 0 rows; amendment versioning proven with a controlled test that was fully reverted; 5 sampled TED notice links resolve.
+**Acceptance results:** first backfill 2026-04-07→2026-09-04 fetched 1,427 (1,151 new, 276 unchanged, 0 failed). Widened re-run over the same window fetched 1,632: **205 new, 0 updated, 1,427 unchanged, 0 failed, 0 duplicate current rows** — the identity + hash rules absorbed the whole overlap. Amendment versioning proven with a controlled test that was fully reverted; sampled TED notice links resolve.
+
 
 ## 3. Data reality — mock data purge (done)
 
@@ -62,7 +73,9 @@ All fabricated content was removed from the interface. There is no mock, sample 
 3. **Cron reachability:** the app is not published; `app_settings.ingest_base_url` points at the preview URL and a token check there returned 401 (dev server returns 200). Re-verify `INGEST_TRIGGER_TOKEN` and repoint `ingest_base_url` once a published URL exists.
 4. **`opportunity_kind`** contains `project`, which nothing produces yet — confirm whether to keep or drop.
 5. **Auth disabled** (`AUTH_ENABLED=false`) — decide when to re-enable.
-6. Pre-existing `Sidebar` `useContext` runtime alert to investigate separately (unrelated to ingestion).
+6. **Division 51 is provisional** — after Phase 2 enrichment, measure what share of its records are genuinely contractor-relevant and drop the division if the share is low.
+7. **11 rows have `is_supply = null`** (no judgeable CPV). Phase 2 enrichment may be able to resolve them from notice text.
+8. Pre-existing `Sidebar` `useContext` runtime alert to investigate separately (unrelated to ingestion).
 
 ## 5. Guardrails still in force
 
