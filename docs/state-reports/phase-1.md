@@ -91,3 +91,53 @@ Backfill against the external project (real data, no generated values):
 - `deadline_at`: 574 → 809 (lot deadline arrays that previously failed to parse)
 - `status` recomputed from real deadlines: 734 open / 693 closed
 - Dashboard "Published last 7 days" now reads 43 instead of 0
+
+## Addendum — CPV scope widened to divisions 44 and 51 (2026-09-04)
+
+### Final CPV code list
+
+| Division | Meaning | Sector label | Status |
+|---|---|---|---|
+| 45 | Construction work | construction | included from the start |
+| 71 | Architectural / engineering services | engineering | included from the start |
+| 09 | Petroleum products, fuels, electricity | energy | included from the start |
+| 65 | Public utilities | utilities | included from the start |
+| 44 | Construction structures and materials, pipes | pipelines and water infrastructure | **added** — strongest relevance of the candidates (water-utility pipes, culverts, HVAC materials) |
+| 51 | Installation services | installation and mechanical works | **added provisionally** — mixed sample; re-measure after Phase 2 enrichment and drop if the relevant proportion is low |
+
+Excluded after a read-only measurement over the same window (genuinely new notices / of those, above €1M):
+31 electrical equipment 85/9, 42 machinery 156→129/7, 48 software 496/78, 72 IT services 791/131. The samples were lighting, UPS units, cleaning and access-control machinery, and municipal IT — volume without contractor-relevant work.
+
+Full filter now in `src/lib/ted.server.ts`:
+`(classification-cpv IN (45* 71* 09* 44* 51* 65*)) AND ((buyer-country IN (FIN)) OR (place-of-performance-country-lot IN (FIN))) AND (publication-date window)`.
+
+### Re-run of the backfill, same window
+
+Window 2026-04-07 → 2026-09-04, trigger `backfill`:
+
+| Metric | Value |
+|---|---|
+| Fetched | 1,632 |
+| New | **205** |
+| Updated (amendments) | 0 |
+| Unchanged (absorbed by identity + hash rules) | 1,427 |
+| Failed | 0 |
+| **Duplicate current rows created** | **0** (verified: no `(source_id, native_id)` appears twice among current rows) |
+| Current opportunities after run | 1,632 |
+| Raw documents after run | 1,632 |
+
+### Supply vs works/services flag
+
+`db/migrations/0004_phase1_supply_flag.sql` adds `opportunities.is_supply boolean` (nullable) with a partial index on current rows. Derived at ingestion in `deriveIsSupply()` from the CPV divisions plus the notice type:
+- design contests (`cn-desg`, `can-desg`, `cn-social`) → works/services;
+- any CPV division in 45 / 51 / 71 / 65 present → works/services;
+- otherwise the primary CPV division in 09 / 31 / 42 / 44 → supply;
+- no judgeable CPV → null.
+
+A pipe supply framework and a pipeline construction contract share division 44, so the flag is what separates them. Current distribution: **218 supply, 1,403 works/services, 11 undetermined**.
+
+### Sector labels
+
+`CPV_SECTORS` now maps 44 → "pipelines and water infrastructure" and 51 → "installation and mechanical works", so no ingested code falls through unlabelled. Existing rows were re-derived from their stored raw payloads (1,416 rows updated; no values invented, no new fetches). Current sector counts: construction 835, engineering 525, pipelines and water infrastructure 167, installation and mechanical works 116, energy 105, utilities 33.
+
+The Opportunities screen gained the two new CPV group filters and a Type column showing Supply vs Works / services.

@@ -33,6 +33,8 @@ const CPV_GROUPS = [
   { value: "45", label: "45 · Construction" },
   { value: "71", label: "71 · Engineering" },
   { value: "09", label: "09 · Energy & fuels" },
+  { value: "44", label: "44 · Pipelines & water" },
+  { value: "51", label: "51 · Installation & mechanical" },
   { value: "65", label: "65 · Utilities" },
 ];
 
@@ -98,6 +100,13 @@ function OpportunitiesPage() {
       mono: true,
       width: "110px",
       render: (r) => (r.cpv?.length ? r.cpv[0] : "—"),
+    },
+    {
+      key: "is_supply",
+      header: "Type",
+      width: "110px",
+      render: (r) =>
+        r.is_supply == null ? "—" : r.is_supply ? "Supply" : "Works / services",
     },
     {
       key: "est_value",

@@ -23,6 +23,7 @@ export interface OpportunityRow {
   published_at: string | null;
   deadline_at: string | null;
   status: string;
+  is_supply: boolean | null;
   version: number;
   url: string;
 }
@@ -37,6 +38,8 @@ export interface OpportunityQuery {
 
 const CPV_GROUPS: { value: string; label: string }[] = [
   { value: "45", label: "45 · Construction" },
+  { value: "44", label: "44 · Pipelines & water infrastructure" },
+  { value: "51", label: "51 · Installation & mechanical works" },
   { value: "71", label: "71 · Engineering" },
   { value: "09", label: "09 · Energy & fuels" },
   { value: "65", label: "65 · Utilities" },
@@ -55,7 +58,7 @@ export const listOpportunities = createServerFn({ method: "GET" })
     let q = db
       .from("opportunities")
       .select(
-        "id,native_id,title,buyer_name,country,cpv,sectors,nuts,est_value,currency,published_at,deadline_at,status,version",
+        "id,native_id,title,buyer_name,country,cpv,sectors,nuts,est_value,currency,published_at,deadline_at,status,is_supply,version",
         { count: "exact" },
       )
       .is("superseded_by", null)
@@ -195,7 +198,7 @@ export const getDashboardSummary = createServerFn({ method: "GET" }).handler(
     const { data: recentRows, error: recentErr } = await db
       .from("opportunities")
       .select(
-        "id,native_id,title,buyer_name,country,cpv,sectors,nuts,est_value,currency,published_at,deadline_at,status,version",
+        "id,native_id,title,buyer_name,country,cpv,sectors,nuts,est_value,currency,published_at,deadline_at,status,is_supply,version",
       )
       .is("superseded_by", null)
       .order("published_at", { ascending: false, nullsFirst: false })

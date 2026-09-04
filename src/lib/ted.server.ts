@@ -20,9 +20,16 @@ import { createHash } from "crypto";
 const TED_SEARCH_URL = "https://api.ted.europa.eu/v3/notices/search";
 const TED_SOURCE_NAME = "TED";
 
-/** Pilot scope: Finland (ISO alpha-3 as TED expects), CPV divisions 45/71/09/65. */
+/**
+ * Pilot scope: Finland (ISO alpha-3 as TED expects), CPV divisions
+ * 45 construction, 71 engineering, 09 energy, 44 materials/pipelines,
+ * 51 installation, 65 utilities.
+ *
+ * Divisions 31, 42, 48 and 72 were measured against the same window and
+ * deliberately excluded — see docs/pilot-source-register.md Part B.
+ */
 export const TED_COUNTRY = "FIN";
-export const TED_CPV_DIVISIONS = ["45", "71", "09", "65"] as const;
+export const TED_CPV_DIVISIONS = ["45", "71", "09", "44", "51", "65"] as const;
 
 const TED_FIELDS = [
   "publication-number",
@@ -144,6 +151,8 @@ const CPV_SECTORS: Record<string, string> = {
   "45": "construction",
   "71": "engineering",
   "09": "energy",
+  "44": "pipelines and water infrastructure",
+  "51": "installation and mechanical works",
   "65": "utilities",
 };
 
@@ -151,6 +160,32 @@ function sectorsFromCpv(cpv: string[]): string[] {
   return Array.from(
     new Set(cpv.map((c) => CPV_SECTORS[c.slice(0, 2)]).filter((s): s is string => Boolean(s))),
   );
+}
+
+/** CPV divisions whose subject matter is goods/materials rather than work done on site. */
+const SUPPLY_DIVISIONS = new Set(["09", "31", "42", "44"]);
+/** CPV divisions that always describe works or services, even as a secondary code. */
+const WORKS_SERVICE_DIVISIONS = new Set(["45", "51", "71", "65"]);
+/** Design contests are always a service procurement. */
+const SERVICE_NOTICE_TYPES = new Set(["cn-desg", "can-desg", "cn-social"]);
+
+/**
+ * true  = supply / materials contract (e.g. a pipe supply framework)
+ * false = works or services contract (e.g. pipeline construction)
+ * null  = no CPV code we can judge on.
+ *
+ * A pipe supply framework and a pipeline construction contract share CPV
+ * division 44, so contractors need them separated. Works/services divisions
+ * win whenever present; otherwise the primary (first) CPV code decides.
+ */
+export function deriveIsSupply(cpv: string[], noticeType: string | null): boolean | null {
+  if (noticeType && SERVICE_NOTICE_TYPES.has(noticeType)) return false;
+  const divisions = cpv.map((c) => c.slice(0, 2));
+  if (divisions.length === 0) return null;
+  if (divisions.some((d) => WORKS_SERVICE_DIVISIONS.has(d))) return false;
+  const primary = divisions[0];
+  if (SUPPLY_DIVISIONS.has(primary)) return true;
+  return divisions.some((d) => SUPPLY_DIVISIONS.has(d)) ? true : null;
 }
 
 /** NUTS codes look like FI1C2; plain ISO alpha-3 country codes are filtered out. */
@@ -173,6 +208,7 @@ export interface NormalisedNotice {
   publishedAt: string | null;
   deadlineAt: string | null;
   status: string;
+  isSupply: boolean | null;
   payload: Json;
 }
 
@@ -224,6 +260,7 @@ export function normaliseNotice(record: Json): NormalisedNotice | null {
     publishedAt: parseDate(record["publication-date"]),
     deadlineAt,
     status: deadlineAt && new Date(deadlineAt).getTime() < Date.now() ? "closed" : "open",
+    isSupply: deriveIsSupply(cpv, uniqueStrings(record["notice-type"])[0] ?? null),
     payload: record,
   };
 }
@@ -502,6 +539,7 @@ export async function storeNotice(db: Db, sourceId: string, record: Json): Promi
     published_at: n.publishedAt,
     deadline_at: n.deadlineAt,
     status: n.status,
+    is_supply: n.isSupply,
     source_id: sourceId,
     raw_document_id: rawId,
     native_id: n.nativeId,
