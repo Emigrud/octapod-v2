@@ -17,6 +17,7 @@ Builds phase by phase (0→6). Nothing from the "Not in the pilot" list without 
 - [ ] Phase 6 — Client profile + fit scores.
 
 ## Open decisions
+- **Applying migrations** (resolved 2026-09-04): stay on the external Supabase project (NOT Lovable Cloud). To let the agent apply migrations directly, the user provides the Postgres connection string once as the `OCTAPOD_DB_URL` secret.
 - When to re-enable auth (currently off).
 - Apply Phase 1 migrations (user runs SQL manually, as for Phase 0B).
 - Deviations pending confirmation: ingestion runs as a TanStack server route (project has no Supabase Edge Functions), and raw payload = TED Search API JSON rather than eForms XML.
