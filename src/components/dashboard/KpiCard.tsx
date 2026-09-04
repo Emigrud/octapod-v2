@@ -1,17 +1,14 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { Sparkline } from "./Sparkline";
 
 export type KpiTile = "blue" | "teal" | "orange" | "green" | "violet" | "neutral";
 
 interface KpiCardProps {
   label: string;
   value: ReactNode;
-  delta?: { direction: "up" | "down" | "flat"; text: string };
+  hint?: string;
   icon?: ReactNode;
-  spark?: number[];
   tile?: KpiTile;
-  trailing?: ReactNode;
   className?: string;
 }
 
@@ -24,16 +21,7 @@ const TILE_CLASSES: Record<KpiTile, string> = {
   neutral: "bg-surface-2 text-muted-foreground",
 };
 
-export function KpiCard({
-  label,
-  value,
-  delta,
-  icon,
-  spark,
-  tile = "blue",
-  trailing,
-  className,
-}: KpiCardProps) {
+export function KpiCard({ label, value, hint, icon, tile = "blue", className }: KpiCardProps) {
   return (
     <div
       className={cn(
@@ -57,28 +45,9 @@ export function KpiCard({
           <div className="mt-1 font-mono text-[28px] font-semibold leading-none text-foreground tabular">
             {value}
           </div>
-          {delta && (
-            <div
-              className={cn(
-                "mt-2 flex items-center gap-1 text-[11px]",
-                delta.direction === "up" && "text-success",
-                delta.direction === "down" && "text-danger",
-                delta.direction === "flat" && "text-subtle-foreground",
-              )}
-            >
-              <span className="font-mono">
-                {delta.direction === "up" ? "↑" : delta.direction === "down" ? "↓" : "·"}
-              </span>
-              <span className="text-muted-foreground">{delta.text}</span>
-            </div>
-          )}
+          {hint && <div className="mt-2 text-[11px] text-muted-foreground">{hint}</div>}
         </div>
       </div>
-      {(spark || trailing) && (
-        <div className="pointer-events-none absolute bottom-3 right-3 opacity-95">
-          {trailing ?? (spark && <Sparkline points={spark} stroke="var(--accent-primary)" />)}
-        </div>
-      )}
     </div>
   );
 }
