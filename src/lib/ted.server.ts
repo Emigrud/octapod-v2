@@ -117,12 +117,22 @@ function pickLocalised(value: unknown): { text: string | null; lang: string | nu
   return { text: null, lang: null };
 }
 
-function parseDate(value: unknown): string | null {
+/**
+ * TED emits dates as `2026-07-01+02:00` (date plus UTC offset, no time part),
+ * which `new Date()` cannot parse. Insert midnight local time before parsing.
+ * Timestamps like `2026-08-15T12:00:00+03:00` pass through unchanged.
+ */
+export function parseDate(value: unknown): string | null {
   const raw = Array.isArray(value) ? value[0] : value;
   if (typeof raw !== "string" || raw.length < 8) return null;
-  const d = new Date(raw);
+  const dateOnlyWithOffset = raw.match(/^(\d{4}-\d{2}-\d{2})(Z|[+-]\d{2}:?\d{2})$/);
+  const normalised = dateOnlyWithOffset
+    ? `${dateOnlyWithOffset[1]}T00:00:00${dateOnlyWithOffset[2]}`
+    : raw;
+  const d = new Date(normalised);
   return Number.isNaN(d.getTime()) ? null : d.toISOString();
 }
+
 
 function parseNumber(value: unknown): number | null {
   const raw = Array.isArray(value) ? value[0] : value;

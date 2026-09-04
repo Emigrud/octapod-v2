@@ -77,3 +77,17 @@ No mock or sample data was introduced. The 1,427 opportunities and 1,427 raw doc
 ---
 
 **Phase 1 is complete and verified** against the external Supabase project. This report can be handed on to generate the Phase 2 (AI enrichment) prompt.
+
+## Addendum — publication-date field mapping fix (2026-09-04)
+
+TED returns `publication-date` as `2026-07-01+02:00` (date plus UTC offset, no
+time component), which `new Date()` cannot parse, so every `published_at` was
+stored as NULL. `parseDate()` in `src/lib/ted.server.ts` now normalises that
+shape to `<date>T00:00:00<offset>` before parsing; timestamps with a time part
+are unaffected.
+
+Backfill against the external project (real data, no generated values):
+- `published_at`: 0 → 1,427 of 1,427 current opportunities (2026-04-06 … 2026-09-03)
+- `deadline_at`: 574 → 809 (lot deadline arrays that previously failed to parse)
+- `status` recomputed from real deadlines: 734 open / 693 closed
+- Dashboard "Published last 7 days" now reads 43 instead of 0
