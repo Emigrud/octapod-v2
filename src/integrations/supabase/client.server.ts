@@ -31,7 +31,12 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
 
 function createSupabaseAdminClient() {
   const SUPABASE_URL = process.env['SUPABASE_URL'];
-  const SUPABASE_SERVICE_ROLE_KEY = process.env['SUPABASE_SERVICE_ROLE_KEY'];
+  // External Supabase project: the service-role key is stored under an
+  // application-owned name (the SUPABASE_ prefix is reserved/managed by the
+  // platform and cannot be set for an external project). Fall back to the
+  // managed name for compatibility.
+  const SUPABASE_SERVICE_ROLE_KEY =
+    process.env['OCTAPOD_SERVICE_ROLE_KEY'] || process.env['SUPABASE_SERVICE_ROLE_KEY'];
 
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
     const missing = [
