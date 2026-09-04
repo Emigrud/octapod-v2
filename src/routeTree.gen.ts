@@ -20,6 +20,7 @@ import { Route as AuthenticatedOpportunitiesRouteImport } from './routes/_authen
 import { Route as AuthenticatedMapRouteImport } from './routes/_authenticated/map'
 import { Route as AuthenticatedCompetitorsRouteImport } from './routes/_authenticated/competitors'
 import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
+import { Route as ApiPublicPhase0bVerifyRouteImport } from './routes/api/public/phase0b-verify'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -77,6 +78,11 @@ const AuthenticatedCalendarRoute = AuthenticatedCalendarRouteImport.update({
   path: '/calendar',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicPhase0bVerifyRoute = ApiPublicPhase0bVerifyRouteImport.update({
+  id: '/api/public/phase0b-verify',
+  path: '/api/public/phase0b-verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/signals': typeof AuthenticatedSignalsRoute
+  '/api/public/phase0b-verify': typeof ApiPublicPhase0bVerifyRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/signals': typeof AuthenticatedSignalsRoute
   '/': typeof AuthenticatedIndexRoute
+  '/api/public/phase0b-verify': typeof ApiPublicPhase0bVerifyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/signals': typeof AuthenticatedSignalsRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/api/public/phase0b-verify': typeof ApiPublicPhase0bVerifyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/signals'
+    | '/api/public/phase0b-verify'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/signals'
     | '/'
+    | '/api/public/phase0b-verify'
   id:
     | '__root__'
     | '/_authenticated'
@@ -154,11 +165,13 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/signals'
     | '/_authenticated/'
+    | '/api/public/phase0b-verify'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiPublicPhase0bVerifyRoute: typeof ApiPublicPhase0bVerifyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -240,6 +253,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCalendarRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/phase0b-verify': {
+      id: '/api/public/phase0b-verify'
+      path: '/api/public/phase0b-verify'
+      fullPath: '/api/public/phase0b-verify'
+      preLoaderRoute: typeof ApiPublicPhase0bVerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -273,6 +293,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiPublicPhase0bVerifyRoute: ApiPublicPhase0bVerifyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
