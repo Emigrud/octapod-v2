@@ -73,7 +73,9 @@ All fabricated content was removed from the interface. There is no mock, sample 
 3. **Cron reachability:** the app is not published; `app_settings.ingest_base_url` points at the preview URL and a token check there returned 401 (dev server returns 200). Re-verify `INGEST_TRIGGER_TOKEN` and repoint `ingest_base_url` once a published URL exists.
 4. **`opportunity_kind`** contains `project`, which nothing produces yet — confirm whether to keep or drop.
 5. **Auth disabled** (`AUTH_ENABLED=false`) — decide when to re-enable.
-6. Pre-existing `Sidebar` `useContext` runtime alert to investigate separately (unrelated to ingestion).
+6. **Division 51 is provisional** — after Phase 2 enrichment, measure what share of its records are genuinely contractor-relevant and drop the division if the share is low.
+7. **11 rows have `is_supply = null`** (no judgeable CPV). Phase 2 enrichment may be able to resolve them from notice text.
+8. Pre-existing `Sidebar` `useContext` runtime alert to investigate separately (unrelated to ingestion).
 
 ## 5. Guardrails still in force
 
