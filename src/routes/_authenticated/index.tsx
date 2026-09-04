@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Radio, Target, Wallet, CalendarDays, SlidersHorizontal } from "lucide-react";
 import { PageHeader } from "@/components/shell/PageHeader";
+import { IllustrativeDataNotice } from "@/components/octapod";
 import {
   KpiCard,
   MapPlaceholder,
@@ -44,6 +45,8 @@ function DashboardPage() {
             className="inline-flex items-center gap-1.5 rounded-md border border-hairline bg-surface-1 px-3 py-1.5 text-[12px] text-muted-foreground hover:text-foreground"
           >
             <SlidersHorizontal className="h-3.5 w-3.5" />
+
+      <IllustrativeDataNotice what="the dashboard data source" />
             Customize dashboard
           </button>
         }

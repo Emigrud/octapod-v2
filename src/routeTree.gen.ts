@@ -18,8 +18,10 @@ import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedProjectsRouteImport } from './routes/_authenticated/projects'
 import { Route as AuthenticatedOpportunitiesRouteImport } from './routes/_authenticated/opportunities'
 import { Route as AuthenticatedMapRouteImport } from './routes/_authenticated/map'
+import { Route as AuthenticatedIngestionRouteImport } from './routes/_authenticated/ingestion'
 import { Route as AuthenticatedCompetitorsRouteImport } from './routes/_authenticated/competitors'
 import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
+import { Route as ApiPublicIngestTedRouteImport } from './routes/api/public/ingest/ted'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -66,6 +68,11 @@ const AuthenticatedMapRoute = AuthenticatedMapRouteImport.update({
   path: '/map',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedIngestionRoute = AuthenticatedIngestionRouteImport.update({
+  id: '/ingestion',
+  path: '/ingestion',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedCompetitorsRoute =
   AuthenticatedCompetitorsRouteImport.update({
     id: '/competitors',
@@ -77,23 +84,31 @@ const AuthenticatedCalendarRoute = AuthenticatedCalendarRouteImport.update({
   path: '/calendar',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicIngestTedRoute = ApiPublicIngestTedRouteImport.update({
+  id: '/api/public/ingest/ted',
+  path: '/api/public/ingest/ted',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/auth': typeof AuthRoute
   '/calendar': typeof AuthenticatedCalendarRoute
   '/competitors': typeof AuthenticatedCompetitorsRoute
+  '/ingestion': typeof AuthenticatedIngestionRoute
   '/map': typeof AuthenticatedMapRoute
   '/opportunities': typeof AuthenticatedOpportunitiesRoute
   '/projects': typeof AuthenticatedProjectsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/signals': typeof AuthenticatedSignalsRoute
+  '/api/public/ingest/ted': typeof ApiPublicIngestTedRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/calendar': typeof AuthenticatedCalendarRoute
   '/competitors': typeof AuthenticatedCompetitorsRoute
+  '/ingestion': typeof AuthenticatedIngestionRoute
   '/map': typeof AuthenticatedMapRoute
   '/opportunities': typeof AuthenticatedOpportunitiesRoute
   '/projects': typeof AuthenticatedProjectsRoute
@@ -101,6 +116,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/signals': typeof AuthenticatedSignalsRoute
   '/': typeof AuthenticatedIndexRoute
+  '/api/public/ingest/ted': typeof ApiPublicIngestTedRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -108,6 +124,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/calendar': typeof AuthenticatedCalendarRoute
   '/_authenticated/competitors': typeof AuthenticatedCompetitorsRoute
+  '/_authenticated/ingestion': typeof AuthenticatedIngestionRoute
   '/_authenticated/map': typeof AuthenticatedMapRoute
   '/_authenticated/opportunities': typeof AuthenticatedOpportunitiesRoute
   '/_authenticated/projects': typeof AuthenticatedProjectsRoute
@@ -115,6 +132,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/signals': typeof AuthenticatedSignalsRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/api/public/ingest/ted': typeof ApiPublicIngestTedRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -123,17 +141,20 @@ export interface FileRouteTypes {
     | '/auth'
     | '/calendar'
     | '/competitors'
+    | '/ingestion'
     | '/map'
     | '/opportunities'
     | '/projects'
     | '/reports'
     | '/settings'
     | '/signals'
+    | '/api/public/ingest/ted'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
     | '/calendar'
     | '/competitors'
+    | '/ingestion'
     | '/map'
     | '/opportunities'
     | '/projects'
@@ -141,12 +162,14 @@ export interface FileRouteTypes {
     | '/settings'
     | '/signals'
     | '/'
+    | '/api/public/ingest/ted'
   id:
     | '__root__'
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/calendar'
     | '/_authenticated/competitors'
+    | '/_authenticated/ingestion'
     | '/_authenticated/map'
     | '/_authenticated/opportunities'
     | '/_authenticated/projects'
@@ -154,11 +177,13 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/signals'
     | '/_authenticated/'
+    | '/api/public/ingest/ted'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiPublicIngestTedRoute: typeof ApiPublicIngestTedRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -226,6 +251,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMapRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ingestion': {
+      id: '/_authenticated/ingestion'
+      path: '/ingestion'
+      fullPath: '/ingestion'
+      preLoaderRoute: typeof AuthenticatedIngestionRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/competitors': {
       id: '/_authenticated/competitors'
       path: '/competitors'
@@ -240,12 +272,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCalendarRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/ingest/ted': {
+      id: '/api/public/ingest/ted'
+      path: '/api/public/ingest/ted'
+      fullPath: '/api/public/ingest/ted'
+      preLoaderRoute: typeof ApiPublicIngestTedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCalendarRoute: typeof AuthenticatedCalendarRoute
   AuthenticatedCompetitorsRoute: typeof AuthenticatedCompetitorsRoute
+  AuthenticatedIngestionRoute: typeof AuthenticatedIngestionRoute
   AuthenticatedMapRoute: typeof AuthenticatedMapRoute
   AuthenticatedOpportunitiesRoute: typeof AuthenticatedOpportunitiesRoute
   AuthenticatedProjectsRoute: typeof AuthenticatedProjectsRoute
@@ -258,6 +298,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCalendarRoute: AuthenticatedCalendarRoute,
   AuthenticatedCompetitorsRoute: AuthenticatedCompetitorsRoute,
+  AuthenticatedIngestionRoute: AuthenticatedIngestionRoute,
   AuthenticatedMapRoute: AuthenticatedMapRoute,
   AuthenticatedOpportunitiesRoute: AuthenticatedOpportunitiesRoute,
   AuthenticatedProjectsRoute: AuthenticatedProjectsRoute,
@@ -273,6 +314,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiPublicIngestTedRoute: ApiPublicIngestTedRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
