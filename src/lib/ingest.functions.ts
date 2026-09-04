@@ -147,3 +147,94 @@ export const triggerTedIngest = createServerFn({ method: "POST" })
     const { runTedIngest } = await import("@/lib/ted.server");
     return runTedIngest({ trigger: "manual", daysBack: data.daysBack ?? undefined });
   });
+
+/* ------------------------------------------------------------------ */
+/* Dashboard summary — computed only from real ingested TED rows.      */
+/* Nothing here is estimated, illustrative or generated.               */
+/* ------------------------------------------------------------------ */
+
+export interface DashboardSummary {
+  totalOpportunities: number;
+  publishedLast7Days: number;
+  closingNext30Days: number;
+  totalEstValue: { amount: number; currency: string } | null;
+  lastIngestAt: string | null;
+  topBuyers: { name: string; count: number }[];
+  recent: OpportunityRow[];
+}
+
+export const getDashboardSummary = createServerFn({ method: "GET" }).handler(
+  async (): Promise<DashboardSummary> => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const db = supabaseAdmin as unknown as { from: (t: string) => any };
+
+    const now = new Date();
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 864e5).toISOString();
+    const in30Days = new Date(now.getTime() + 30 * 864e5).toISOString();
+
+    const base = () => db.from("opportunities").select("id", { count: "exact", head: true }).is("superseded_by", null);
+
+    const [{ count: total }, { count: recentCount }, { count: closing }] = await Promise.all([
+      base(),
+      base().gte("published_at", sevenDaysAgo),
+      base().gte("deadline_at", now.toISOString()).lte("deadline_at", in30Days),
+    ]);
+
+    const { data: valueRows, error: valueErr } = await db
+      .from("opportunities")
+      .select("est_value,currency")
+      .is("superseded_by", null)
+      .not("est_value", "is", null)
+      .limit(5000);
+    if (valueErr) throw new Error(`Loading values failed: ${valueErr.message}`);
+
+    const eurTotal = (valueRows ?? [])
+      .filter((r: any) => (r.currency ?? "EUR") === "EUR")
+      .reduce((sum: number, r: any) => sum + Number(r.est_value ?? 0), 0);
+
+    const { data: recentRows, error: recentErr } = await db
+      .from("opportunities")
+      .select(
+        "id,native_id,title,buyer_name,country,cpv,sectors,nuts,est_value,currency,published_at,deadline_at,status,version",
+      )
+      .is("superseded_by", null)
+      .order("published_at", { ascending: false, nullsFirst: false })
+      .limit(8);
+    if (recentErr) throw new Error(`Loading recent opportunities failed: ${recentErr.message}`);
+
+    const { data: buyerRows } = await db
+      .from("opportunities")
+      .select("buyer_name")
+      .is("superseded_by", null)
+      .not("buyer_name", "is", null)
+      .limit(5000);
+
+    const buyerCounts = new Map<string, number>();
+    for (const r of (buyerRows ?? []) as { buyer_name: string }[]) {
+      buyerCounts.set(r.buyer_name, (buyerCounts.get(r.buyer_name) ?? 0) + 1);
+    }
+    const topBuyers = [...buyerCounts.entries()]
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+
+    const { data: lastRun } = await db
+      .from("ingest_runs")
+      .select("finished_at,started_at")
+      .order("started_at", { ascending: false })
+      .limit(1);
+
+    return {
+      totalOpportunities: (total as number | null) ?? 0,
+      publishedLast7Days: (recentCount as number | null) ?? 0,
+      closingNext30Days: (closing as number | null) ?? 0,
+      totalEstValue: eurTotal > 0 ? { amount: eurTotal, currency: "EUR" } : null,
+      lastIngestAt: lastRun?.[0]?.finished_at ?? lastRun?.[0]?.started_at ?? null,
+      topBuyers,
+      recent: ((recentRows ?? []) as Omit<OpportunityRow, "url">[]).map((r) => ({
+        ...r,
+        url: `https://ted.europa.eu/en/notice/-/detail/${r.native_id}`,
+      })),
+    };
+  },
+);

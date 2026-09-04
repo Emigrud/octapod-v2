@@ -1,4 +1,4 @@
-import { Bell, Building2, ChevronDown, LogOut, Search } from "lucide-react";
+import { Building2, LogOut, Search } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
@@ -44,31 +44,6 @@ export function TopBar() {
           <Building2 className="h-3.5 w-3.5 text-subtle-foreground" />
           <span className={isError ? "text-danger" : undefined}>{orgLabel}</span>
         </div>
-
-        <button
-          type="button"
-          className="relative flex h-9 w-9 items-center justify-center rounded-md border border-hairline bg-surface-1 text-muted-foreground hover:text-foreground"
-          aria-label="Notifications"
-        >
-          <Bell className="h-4 w-4" />
-          <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-danger px-1 font-mono text-[9.5px] font-semibold text-white">
-            3
-          </span>
-        </button>
-
-        <button
-          type="button"
-          className="flex items-center gap-2 rounded-md border border-hairline bg-surface-1 py-1 pl-1 pr-2 text-left hover:border-primary/40"
-        >
-          <span className="flex h-7 w-7 items-center justify-center rounded-md bg-primary font-mono text-[11px] font-semibold text-primary-foreground">
-            JP
-          </span>
-          <span className="hidden text-[12px] leading-tight sm:block">
-            <span className="block font-medium text-foreground">J. Parkkinen</span>
-            <span className="block text-[10.5px] text-subtle-foreground">Analyst</span>
-          </span>
-          <ChevronDown className="h-3.5 w-3.5 text-subtle-foreground" />
-        </button>
 
         {AUTH_ENABLED && (
           <button
