@@ -12,7 +12,6 @@ import {
   Building2,
   BellRing,
   Database,
-  Sparkles,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -73,28 +72,6 @@ export function Sidebar() {
         </div>
       </nav>
 
-
-      <div className="mx-3 mb-2 rounded-md border border-hairline bg-surface-1 p-3">
-        <div className="text-eyebrow">System status</div>
-        <div className="mt-1 flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-success" />
-          <span className="text-[11.5px] text-foreground">All systems operational</span>
-        </div>
-        <div className="mt-1 font-mono text-[10px] text-subtle-foreground">
-          Last update · 2 min ago
-        </div>
-      </div>
-
-      <button
-        type="button"
-        className="mx-3 mb-3 inline-flex items-center justify-between gap-2 rounded-md border border-hairline bg-surface-1 px-3 py-2 text-[12px] text-foreground hover:border-primary/40 hover:bg-primary-muted"
-      >
-        <span className="inline-flex items-center gap-2">
-          <Sparkles className="h-3.5 w-3.5 text-primary" />
-          What's new
-        </span>
-        <span className="text-subtle-foreground">›</span>
-      </button>
 
     </aside>
   );
