@@ -208,6 +208,7 @@ export interface NormalisedNotice {
   publishedAt: string | null;
   deadlineAt: string | null;
   status: string;
+  isSupply: boolean | null;
   payload: Json;
 }
 
@@ -259,6 +260,7 @@ export function normaliseNotice(record: Json): NormalisedNotice | null {
     publishedAt: parseDate(record["publication-date"]),
     deadlineAt,
     status: deadlineAt && new Date(deadlineAt).getTime() < Date.now() ? "closed" : "open",
+    isSupply: deriveIsSupply(cpv, uniqueStrings(record["notice-type"])[0] ?? null),
     payload: record,
   };
 }
@@ -537,6 +539,7 @@ export async function storeNotice(db: Db, sourceId: string, record: Json): Promi
     published_at: n.publishedAt,
     deadline_at: n.deadlineAt,
     status: n.status,
+    is_supply: n.isSupply,
     source_id: sourceId,
     raw_document_id: rawId,
     native_id: n.nativeId,
