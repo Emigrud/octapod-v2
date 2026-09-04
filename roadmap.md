@@ -10,6 +10,7 @@ Builds phase by phase (0→6). Nothing from the "Not in the pilot" list without 
   - [x] Ingestion (`src/lib/ted.server.ts`), cron endpoint `/api/public/ingest/ted`, admin screen `/ingestion`, real Opportunities screen.
   - [x] Backfill + acceptance: 1,427 real TED opportunities; idempotency double-run (0 new); amendment versioning (reverted test); 3 ingest_runs; 5 TED links resolve (HTTP 202).
   - Open: verify deployed `INGEST_TRIGGER_TOKEN` + set `ingest_base_url` to the published URL once published; investigate pre-existing `Sidebar` useContext runtime alert.
+- [ ] **TED CPV coverage review** (in progress) — read-only probe of divisions 31, 42, 44, 48, 51, 72 for Finland; per-division counts, 10 sample titles + buyer, and count above EUR 1M. No DB writes; widen `TED_CPV_DIVISIONS` only after the user approves specific divisions.
 - [ ] Phase 2 — AI enrichment (Claude extraction, strict JSON schema, source-text-only).
 - [ ] Phase 3 — Map (Mapbox) + opportunity detail.
 - [ ] Phase 4 — Early signals (Fingrid + news) + signal linking.
