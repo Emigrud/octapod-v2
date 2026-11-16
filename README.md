@@ -1,14 +1,60 @@
-# Welcome to your Lovable project
+# OCTAPOD v2
+
+The product is called OCTAPOD. Read the attached Master Strategy Document (Pilot) fully before starting.
+
+This is PHASE 0A — frontend only. Build NO backend, NO database, NO authentication, NO tables, NO edge functions. Do not enable Lovable Cloud. We will connect our own Supabase project before any backend work begins.
+
+Build the design system and the application shell.
+
+DESIGN LANGUAGE — follow Master Strategy section 9, "Baltic chart room": the visual world of nautical charts, grid control rooms and engineering drawings. Calm Northern precision carrying dense, live data. Explicitly avoid default AI-SaaS looks: no purple gradients, no cream-and-terracotta landing template, no pure-black theme with a single acid accent, no stock illustrations.
+
+- Dark theme by default, plus a light "chart paper" mode with a toggle.
+
+- Space Grotesk for display headings, used with restraint. Inter for UI and body. IBM Plex Mono for numbers, IDs, coordinates and money.
+
+- Layered deep blue-slate base palette. Exactly two functional accents used consistently to encode meaning: ice-cyan for tenders, amber for early signals. Colour is information, never decoration.
+
+- Subtle isoline or contour texture on map-adjacent surfaces. Hairline dividers, used sparingly. ISO country-code chips, never flags.
+
+- Strong typographic hierarchy, sentence case.
+
+- Microcopy: plain, active, specific. "Save filter", not "Submit". Errors say what happened and how to fix it.
+
+APP SHELL:
+
+- Left navigation: Dashboard, Opportunities, Signals, Map, Settings.
+
+- Top bar with the product name and a placeholder area for the organization name.
+
+- Every page is a styled empty state for now, written so it invites the action that will exist later.
+
+REUSABLE COMPONENTS — these will be used in every later phase, so build them properly now:
+
+DataTable, FilterBar, StatCard, Tag/Chip, EmptyState. Each must have loading, empty and error states.
+
+Document all design tokens in code so later phases reuse them instead of inventing new styles.
+
+WHEN FINISHED, report:
+
+1. What you built — pages, components, files.
+
+2. Confirm explicitly that no database, no authentication, no backend and no Lovable Cloud project was created.
+
+3. The design tokens you defined and where they live in the code.
+
+4. Anything you were unsure about.
+
+5. Make design look modern, expensive and professional.
 
 This project was built with [Lovable](https://lovable.dev).
 
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/8decc1be-879f-4382-ba74-d42cf7bb1c09).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +66,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
