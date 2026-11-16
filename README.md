@@ -58,6 +58,47 @@ Continue developing this project in the [Lovable editor](https://lovable.dev/pro
 
 ## Development
 
+### Environment configuration and public-repository safety
+
+Copy `.env.example` to `.env` and replace the public placeholders with your
+own external project's connection settings. Configure the three private
+credentials in your hosting provider's secure environment settings (or an
+ignored local `.env` for development). Never use a `VITE_` prefix for a
+database password, service-role key, or ingestion trigger token.
+
+**Cleanup status:** `.env` is still tracked. Lovable manages `.gitignore`
+and does not permit the agent to edit it or change Git tracking. Before
+making the repository public, add these lines to `.gitignore` yourself
+in your local checkout:
+
+```gitignore
+.env
+.env.*
+*.env
+!.env.example
+```
+
+Ignoring a file does **not** remove it from Git if it is already tracked.
+Then run these commands in your local checkout:
+
+```sh
+git rm --cached .env
+git add .gitignore .env.example
+git commit -m "Stop tracking local environment settings"
+git push
+```
+
+This keeps your local `.env` while removing it from subsequent commits.
+Earlier commits still contain previously committed values. A publishable key
+is intentionally public; if any private credential was ever committed,
+rotate it and arrange history cleanup before sharing the repository.
+Ensure the hosting environment still supplies all six public connection
+settings before publishing; an ignored local file is not deployed through Git.
+Lovable currently reserves the `SUPABASE_` and `VITE_` prefixes in its
+user-created secret form, so that form cannot replace this project's `.env`.
+Do not remove the hosted connection settings until a replacement is configured
+and the dashboard has been checked.
+
 Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
 
 ```sh

@@ -18,6 +18,7 @@ Builds phase by phase (0→6). Nothing from the "Not in the pilot" list without 
 - [ ] Phase 6 — Client profile + fit scores.
 
 ## Open decisions
+- **Public-repository cleanup:** placeholder `.env.example` and local instructions are added. Ignoring and untracking the already-tracked `.env` require user action because the platform manages `.gitignore` and Git state. Preserve hosted public connection settings first; untracking does not remove earlier history.
 - **Applying migrations** (resolved 2026-09-04): stay on the external Supabase project (NOT Lovable Cloud). To let the agent apply migrations directly, the user provides the Postgres connection string once as the `OCTAPOD_DB_URL` secret.
 - When to re-enable auth (currently off).
 - Apply Phase 1 migrations (user runs SQL manually, as for Phase 0B).
