@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Commit only placeholders in `.env.example` for setup guidance; local environment-file exclusion and untracking require user action when platform-managed, and hosted public connection settings must be preserved to avoid outages.
